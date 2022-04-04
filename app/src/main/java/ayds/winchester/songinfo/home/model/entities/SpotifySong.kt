@@ -24,7 +24,6 @@ data class SpotifySong(
   override var isLocallyStored: Boolean = false
 ) : Song {
 
-    val year: String = releaseDatePrecision.split("-").first()
 }
 
 object EmptySong : Song {
