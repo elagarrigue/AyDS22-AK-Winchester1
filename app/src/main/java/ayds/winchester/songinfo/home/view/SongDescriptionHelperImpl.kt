@@ -9,6 +9,9 @@ interface SongDescriptionHelper {
 }
 
 internal class SongDescriptionHelperImpl : SongDescriptionHelper {
+
+    private val formattedDate= SongDateFormatImpl()
+
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
             is SpotifySong ->
@@ -18,8 +21,8 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n"
-                        //TODO cambiar el Year por release que llama a la funcion formatear
-                       // "Release Date: ${song.getFormmatedReleaseDate()}"
+                        //TODO cambiar el Year por la propiedad formattedDate
+                       // "Release Date: ${formattedDate.getFormattedDate(aca una song)}"
             else -> "Song not found"
         }
     }
