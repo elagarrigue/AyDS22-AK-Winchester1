@@ -20,9 +20,8 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
                             if (song.isLocallyStored) "[*]" else ""
                 }\n" +
                         "Artist: ${song.artistName}\n" +
-                        "Album: ${song.albumName}\n"
-                        //TODO cambiar el Year por la propiedad formattedDate
-                       // "Release Date: ${formattedDate.getFormattedDate(aca una song)}"
+                        "Album: ${song.albumName}\n" +
+                        "Release Date: ${formattedDate.getFormattedDate(song)}"
             else -> "Song not found"
         }
     }
