@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.home.model.repository.external.spotify.tracks
 
+import ayds.winchester.songinfo.home.model.entities.DatePrecision
 import com.google.gson.Gson
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 import com.google.gson.JsonObject
@@ -61,9 +62,14 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
         return album[RELEASE_DATE].asString
     }
 
-    private fun JsonObject.getReleaseDatePrecision(): String {
+    private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
-        return album[RELEASE_DATE_PRECISION].asString
+        return when (album[RELEASE_DATE_PRECISION].asString.uppercase()) {
+            "DAY" -> DatePrecision.DAY
+            "MONTH" -> DatePrecision.MONTH
+            "YEAR" -> DatePrecision.YEAR
+            else -> DatePrecision.DATE
+        }
     }
 
     private fun JsonObject.getImageUrl(): String {

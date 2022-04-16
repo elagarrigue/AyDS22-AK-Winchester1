@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.home.view
 
+import ayds.winchester.songinfo.home.model.entities.DatePrecision
 import ayds.winchester.songinfo.home.model.entities.Song
 
 interface SongDateFormat {
@@ -8,27 +9,21 @@ interface SongDateFormat {
 
 internal class SongDateFormatImpl : SongDateFormat {
     override fun getFormattedDate(song : Song) : String {
-        val date = song.releaseDate
-        val releaseDatePrecision = song.releaseDatePrecision
-        return formatterDate(date, releaseDatePrecision)
-    }
-
-    private fun formatterDate(date : String, releaseDatePrecision : String) : String {
-        var dateFormatted = ""
-        when (releaseDatePrecision) {
-            "day" -> dateFormatted = dayFormat(date)
-            "month" -> dateFormatted = monthFormat(date)
-            "year" -> dateFormatted = yearFormat(date)
+        with (song) {
+            return formatterDate(releaseDate, releaseDatePrecision)
         }
-        return dateFormatted
     }
 
-    private fun leapYear(year : Int) : Boolean {
-        var isLeapYear = false
-        if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0))
-            isLeapYear = true
-        return isLeapYear
+    private fun formatterDate(date : String, releaseDatePrecision : DatePrecision) : String {
+        return when (releaseDatePrecision) {
+            DatePrecision.DAY -> dayFormat(date)
+            DatePrecision.MONTH -> monthFormat(date)
+            DatePrecision.YEAR -> yearFormat(date)
+            else -> ""
+        }
     }
+
+    private fun leapYear(year : Int) = ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0))
 
     private fun dayFormat(date : String) : String {
         val year = date.substringBefore("-")
