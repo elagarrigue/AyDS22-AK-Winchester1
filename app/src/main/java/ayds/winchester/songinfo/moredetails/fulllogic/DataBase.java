@@ -13,36 +13,6 @@ import java.util.List;
 
 public class DataBase extends SQLiteOpenHelper {
 
-  public static void testDB(){
-    Connection connection = null;
-    try{
-      connection = DriverManager.getConnection("jdbc:sqlite:./dictionary.db");
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select * from artists");
-
-      while(rs.next()){
-        System.out.println("id = " + rs.getInt("id"));
-        System.out.println("artist = " + rs.getString("artist"));
-        System.out.println("info = " + rs.getString("info"));
-        System.out.println("source = " + rs.getString("source"));
-      }
-    }
-    catch(SQLException e){
-      System.err.println(e.getMessage());
-    }
-
-    finally{
-      try{
-        if(connection != null)
-          connection.close();
-      }
-      catch(SQLException e){
-        System.err.println(e);
-      }
-    }
-  }
-
   public static void saveArtist(DataBase dbHelper, String artist, String info){
     SQLiteDatabase db = dbHelper.getWritableDatabase();
     ContentValues values = new ContentValues();
