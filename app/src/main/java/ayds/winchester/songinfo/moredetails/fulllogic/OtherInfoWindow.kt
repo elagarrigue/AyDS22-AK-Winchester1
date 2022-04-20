@@ -22,8 +22,6 @@ import java.lang.StringBuilder
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
 
-    //private JPanel imagePanel;
-    // private JLabel posterImageLabel;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
@@ -31,24 +29,23 @@ class OtherInfoWindow : AppCompatActivity() {
         open(intent.getStringExtra("artistName"))
     }
 
-    fun getARtistInfo(artistName: String?) {
+    fun getArtistInfo(artistName: String?) {
 
-        // create
         val retrofit = Retrofit.Builder()
             .baseUrl("https://en.wikipedia.org/w/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
         val wikipediaAPI = retrofit.create(WikipediaAPI::class.java)
-        Log.e("TAG", "artistName $artistName")
+
         Thread {
             var text = DataBase.getInfo(dataBase, artistName)
-            if (text != null) { // exists in db
+            if (text != null) {
                 text = "[*]$text"
-            } else { // get from service
+            }
+            else {
                 val callResponse: Response<String>
                 try {
                     callResponse = wikipediaAPI.getArtistInfo(artistName).execute()
-                    println("JSON " + callResponse.body())
                     val gson = Gson()
                     val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
                     val query = jobj["query"].asJsonObject
@@ -56,12 +53,10 @@ class OtherInfoWindow : AppCompatActivity() {
                     val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
                     if (snippet == null) {
                         text = "No Results"
-                    } else {
+                    }
+                    else {
                         text = snippet.asString.replace("\\n", "\n")
                         text = textToHtml(text, artistName)
-
-
-                        // save to DB  <o/
                         DataBase.saveArtist(dataBase, artistName, text)
                     }
                     val urlString = "https://en.wikipedia.org/?curid=$pageid"
@@ -71,13 +66,11 @@ class OtherInfoWindow : AppCompatActivity() {
                         startActivity(intent)
                     }
                 } catch (e1: IOException) {
-                    Log.e("TAG", "Error $e1")
                     e1.printStackTrace()
                 }
             }
             val imageUrl =
                 "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-            Log.e("TAG", "Get Image from $imageUrl")
             val finalText = text
             runOnUiThread {
                 Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
@@ -90,9 +83,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun open(artist: String?) {
         dataBase = DataBase(this)
         DataBase.saveArtist(dataBase, "test", "sarasa")
-        Log.e("TAG", "" + DataBase.getInfo(dataBase, "test"))
-        Log.e("TAG", "" + DataBase.getInfo(dataBase, "nada"))
-        getARtistInfo(artist)
+        getArtistInfo(artist)
     }
 
     companion object {
