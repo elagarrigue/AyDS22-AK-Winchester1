@@ -10,35 +10,43 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import android.content.Intent
 import android.net.Uri
-import com.squareup.picasso.Picasso
 import android.text.Html
 import android.widget.Button
 import android.widget.ImageView
 import ayds.winchester.songinfo.utils.UtilsInjector
-import ayds.winchester.songinfo.utils.UtilsInjector.imageLoader
 import ayds.winchester.songinfo.utils.view.ImageLoader
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
 
+const val imageUrl =
+    "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+
 class OtherInfoWindow : AppCompatActivity() {
 
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
-    private val imageUrl =
-        "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-
     private lateinit var textPane2: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
     private lateinit var dataBase: DataBase
+    private lateinit var artistName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-
-        open(intent.getStringExtra("artistName"))
+        loadArtistName()
+        initDatabase()
         initProperties()
         initLogoImage()
+        getArtistInfo()
+    }
+
+    private fun initDatabase() {
+        dataBase = DataBase(this)
+    }
+
+    private fun loadArtistName() {
+        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)!!
     }
 
     private fun initProperties() {
@@ -53,7 +61,7 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    fun getArtistInfo(artistName: String?) {
+    private fun getArtistInfo() {
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://en.wikipedia.org/w/")
@@ -95,15 +103,9 @@ class OtherInfoWindow : AppCompatActivity() {
             }
             val finalText = text
             runOnUiThread {
-                textPane2!!.text = Html.fromHtml(finalText)
+                textPane2.text = Html.fromHtml(finalText)
             }
         }.start()
-    }
-
-    private fun open(artist: String?) {
-        dataBase = DataBase(this)
-        DataBase.saveArtist(dataBase, "test", "sarasa")
-        getArtistInfo(artist)
     }
 
     companion object {
