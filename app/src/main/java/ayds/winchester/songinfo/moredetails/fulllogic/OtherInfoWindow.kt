@@ -12,21 +12,30 @@ import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
 import android.text.Html
-import android.util.Log
-import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
 
 class OtherInfoWindow : AppCompatActivity() {
-    private var textPane2: TextView? = null
+
+    private lateinit var textPane2: TextView
+    private lateinit var viewFullArticleButton: Button
+    private lateinit var logoImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-        textPane2 = findViewById(R.id.textPane2)
+
         open(intent.getStringExtra("artistName"))
+        initProperties()
+    }
+
+    private fun initProperties() {
+        textPane2 = findViewById(R.id.textPane2)
+        viewFullArticleButton = findViewById(R.id.openUrlButton)
+        logoImageView = findViewById(R.id.imageView)
     }
 
     fun getArtistInfo(artistName: String?) {
@@ -60,7 +69,7 @@ class OtherInfoWindow : AppCompatActivity() {
                         DataBase.saveArtist(dataBase, artistName, text)
                     }
                     val urlString = "https://en.wikipedia.org/?curid=$pageid"
-                    findViewById<View>(R.id.openUrlButton).setOnClickListener {
+                    viewFullArticleButton.setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.data = Uri.parse(urlString)
                         startActivity(intent)
@@ -73,13 +82,14 @@ class OtherInfoWindow : AppCompatActivity() {
                 "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
             val finalText = text
             runOnUiThread {
-                Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+                Picasso.get().load(imageUrl).into(logoImageView)
                 textPane2!!.text = Html.fromHtml(finalText)
             }
         }.start()
     }
 
     private var dataBase: DataBase? = null
+
     private fun open(artist: String?) {
         dataBase = DataBase(this)
         DataBase.saveArtist(dataBase, "test", "sarasa")
