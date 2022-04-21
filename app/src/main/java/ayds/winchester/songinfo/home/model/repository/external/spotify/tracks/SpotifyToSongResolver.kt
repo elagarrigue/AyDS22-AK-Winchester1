@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.home.model.repository.external.spotify.tracks
 
+
 import ayds.winchester.songinfo.home.model.entities.DatePrecision
 import com.google.gson.Gson
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
@@ -22,14 +23,22 @@ private const val URL = "url"
 private const val EXTERNAL_URL = "external_urls"
 private const val SPOTIFY = "spotify"
 
-internal class JsonToSongResolver : SpotifyToSongResolver {
+internal class JsonToSongResolver(
+    private val datePrecisionHelper: DatePrecisionHelper,
+) : SpotifyToSongResolver {
 
     override fun getSongFromExternalData(serviceData: String?): SpotifySong? =
         try {
             serviceData?.getFirstItem()?.let { item ->
                 SpotifySong(
-                  item.getId(), item.getSongName(), item.getArtistName(), item.getAlbumName(),
-                  item.getReleaseDate(), item.getReleaseDatePrecision(), item.getSpotifyUrl(), item.getImageUrl()
+                    item.getId(),
+                    item.getSongName(),
+                    item.getArtistName(),
+                    item.getAlbumName(),
+                    item.getReleaseDate(),
+                    item.getReleaseDatePrecision(),
+                    item.getSpotifyUrl(),
+                    item.getImageUrl()
                 )
             }
         } catch (e: Exception) {
@@ -64,12 +73,8 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
 
     private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
-        return when (album[RELEASE_DATE_PRECISION].asString.uppercase()) {
-            "DAY" -> DatePrecision.DAY
-            "MONTH" -> DatePrecision.MONTH
-            "YEAR" -> DatePrecision.YEAR
-            else -> DatePrecision.DATE
-        }
+        val albumPrecision = album[RELEASE_DATE_PRECISION]
+        return datePrecisionHelper.getDatePrecision(albumPrecision.asString.uppercase())
     }
 
     private fun JsonObject.getImageUrl(): String {
