@@ -2,13 +2,17 @@ package ayds.winchester.songinfo.moredetails.fulllogic
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
-import ayds.winchester.songinfo.moredetails.fulllogic.DataBase
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import java.util.ArrayList
 
-class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
+private const val DATABASE_NAME = "dictionary.db"
+private const val DATABASE_VERSION = 1
+
+class DataBase(context: Context?
+) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
@@ -26,7 +30,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
             values.put("artist", artist)
             values.put("info", info)
             values.put("source", 1)
-            val newRowId = db.insert("artists", null, values)
+            db.insert("artists", null, values)
         }
 
         @JvmStatic
