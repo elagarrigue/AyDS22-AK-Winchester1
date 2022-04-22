@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
-import android.util.Log
 import java.util.ArrayList
 
 private const val DATABASE_NAME = "dictionary.db"
@@ -17,25 +16,19 @@ class DataBase(context: Context?
         db.execSQL(
             "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
         )
-        Log.i("DB", "DB created")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    companion object {
-        @JvmStatic
-        fun saveArtist(dbHelper: DataBase, artist: String?, info: String?) {
-            val db = dbHelper.writableDatabase
+    fun saveArtist(artist: String?, info: String?) {
             val values = ContentValues()
             values.put("artist", artist)
             values.put("info", info)
             values.put("source", 1)
-            db.insert("artists", null, values)
+            writableDatabase?.insert("artists", null, values)
         }
 
-        @JvmStatic
-        fun getInfo(dbHelper: DataBase, artist: String): String? {
-            val db = dbHelper.readableDatabase
+    fun getInfo(artist: String): String? {
             val projection = arrayOf(
                 "id",
                 "artist",
@@ -44,7 +37,7 @@ class DataBase(context: Context?
             val selection = "artist  = ?"
             val selectionArgs = arrayOf(artist)
             val sortOrder = "artist DESC"
-            val cursor = db.query(
+            val cursor = readableDatabase.query(
                 "artists",
                 projection,
                 selection,
@@ -64,4 +57,3 @@ class DataBase(context: Context?
             return if (items.isEmpty()) null else items[0]
         }
     }
-}
