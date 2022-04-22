@@ -12,44 +12,41 @@ private const val DATABASE_VERSION = 1
 class DataBase(context: Context?
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
+    private val projection = arrayOf(
+        ID_COLUMN,
+        ARTIST_COLUMN,
+        INFO_COLUMN,
+        SOURCE_COLUMN
+    )
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
-        )
+        db.execSQL(createArtistTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
     fun saveArtist(artist: String?, info: String?) {
-            val values = ContentValues()
-            values.put("artist", artist)
-            values.put("info", info)
-            values.put("source", 1)
-            writableDatabase?.insert("artists", null, values)
+            val values = ContentValues().apply {
+                put(ARTIST_COLUMN, artist)
+                put(INFO_COLUMN, info)
+                put(SOURCE_COLUMN, 1)
+            }
+            writableDatabase?.insert(ARTISTS_TABLE, null, values)
         }
 
     fun getInfo(artist: String): String? {
-            val projection = arrayOf(
-                "id",
-                "artist",
-                "info"
-            )
-            val selection = "artist  = ?"
-            val selectionArgs = arrayOf(artist)
-            val sortOrder = "artist DESC"
             val cursor = readableDatabase.query(
-                "artists",
+                ARTISTS_TABLE,
                 projection,
-                selection,
-                selectionArgs,
+                "$ARTIST_COLUMN= ?",
+                arrayOf(artist),
                 null,
                 null,
-                sortOrder
+                "$ARTIST_COLUMN DESC"
             )
             val items: MutableList<String> = ArrayList()
             while (cursor.moveToNext()) {
                 val info = cursor.getString(
-                    cursor.getColumnIndexOrThrow("info")
+                    cursor.getColumnIndexOrThrow("$INFO_COLUMN")
                 )
                 items.add(info)
             }
