@@ -23,7 +23,6 @@ const val imageUrl =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class OtherInfoWindow : AppCompatActivity() {
-
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private lateinit var textPane2: TextView
     private lateinit var viewFullArticleButton: Button
@@ -59,6 +58,19 @@ class OtherInfoWindow : AppCompatActivity() {
         runOnUiThread {
             imageLoader.loadImageIntoView(imageUrl, logoImageView)
         }
+    }
+
+    private fun textToHtml(text: String, term: String?): String {
+        val builder = StringBuilder()
+        builder.append("<html><div width=400>")
+        builder.append("<font face=\"arial\">")
+        val textWithBold = text
+            .replace("'", " ")
+            .replace("\n", "<br>")
+            .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase() + "</b>")
+        builder.append(textWithBold)
+        builder.append("</font></div></html>")
+        return builder.toString()
     }
 
     private fun getArtistInfo() {
@@ -107,20 +119,8 @@ class OtherInfoWindow : AppCompatActivity() {
             }
         }.start()
     }
-
+    //To-do eliminar companion object
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
-        fun textToHtml(text: String, term: String?): String {
-            val builder = StringBuilder()
-            builder.append("<html><div width=400>")
-            builder.append("<font face=\"arial\">")
-            val textWithBold = text
-                .replace("'", " ")
-                .replace("\n", "<br>")
-                .replace("(?i)" + term!!.toRegex(), "<b>" + term.toUpperCase() + "</b>")
-            builder.append(textWithBold)
-            builder.append("</font></div></html>")
-            return builder.toString()
-        }
     }
 }
