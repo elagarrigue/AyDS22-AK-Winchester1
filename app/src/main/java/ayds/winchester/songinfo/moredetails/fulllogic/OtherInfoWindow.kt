@@ -1,5 +1,7 @@
 package ayds.winchester.songinfo.moredetails.fulllogic
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.os.Bundle
@@ -28,7 +30,8 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var logoImageView: ImageView
     private lateinit var dataBase: DataBase
     private lateinit var artistName: String
-
+    private var pageid: String? = null
+    private var artistInfoText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,48 +94,61 @@ class OtherInfoWindow : AppCompatActivity() {
         val query = jobj["query"].asJsonObject
         val snippet = query["search"].asJsonArray[0].asJsonObject["snippet"]
         val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
+        this.pageid = pageid.asString
         return snippet.asString.replace("\\n", "\n")
     }
 
     private fun getArtistInfoFromExternal(): String{
         val wikipediaAPI = getWikipediaAPI()
         var text = "No Results"
-        try {
+        return try {
             val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
             val snippet = jsonToArtistInfo(callResponse.body())
             if (snippet != "") {
                 text = textToHtml(text, artistName)
             }
-            return text
+            text
         } catch (e1: IOException) {
             e1.printStackTrace()
-            return text
+            text
         }
     }
 
     private fun getArtistInfo() {
-
         Thread {
-            val text:String
             val artistInfoLocal = getArtistInfoFromLocal()
             if (artistInfoLocal != null) {
-                text = "[*]$artistInfoLocal"
+                artistInfoText = "[*]$artistInfoLocal"
             }
             else {
                 val artistInfoExternal = getArtistInfoFromExternal()
-//                val urlString = "https://en.wikipedia.org/?curid=$pageid"
-//                viewFullArticleButton.setOnClickListener {
-//                    val intent = Intent(Intent.ACTION_VIEW)
-//                    intent.data = Uri.parse(urlString)
-//                    startActivity(intent)
-//                }
-                text = artistInfoExternal
+                artistInfoText = artistInfoExternal
                 DataBase.saveArtist(dataBase, artistName, artistInfoExternal)
             }
-            runOnUiThread {
-                artistInfoTextView.text = Html.fromHtml(text)
-            }
+            updateUI()
         }.start()
+    }
+
+    private fun updateUI() {
+        if (pageid != null) {
+            updateFullArticleButton()
+        }
+        updateArtistInfo()
+    }
+
+    private fun updateFullArticleButton() {
+        val urlString = "https://en.wikipedia.org/?curid=$pageid"
+        viewFullArticleButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(urlString)
+            startActivity(intent)
+        }
+    }
+
+    private fun updateArtistInfo() {
+        runOnUiThread {
+            artistInfoTextView.text = Html.fromHtml(artistInfoText)
+        }
     }
 
     companion object {
