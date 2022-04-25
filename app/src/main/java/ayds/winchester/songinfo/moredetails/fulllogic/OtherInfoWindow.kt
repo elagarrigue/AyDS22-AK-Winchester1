@@ -21,6 +21,7 @@ import java.lang.StringBuilder
 
 const val imageUrl =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+const val wikipediaAPIbaseURL = "https://en.wikipedia.org/w/"
 
 class OtherInfoWindow : AppCompatActivity() {
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
@@ -73,13 +74,17 @@ class OtherInfoWindow : AppCompatActivity() {
         return builder.toString()
     }
 
-    private fun getArtistInfo() {
-
+    private fun getWikipediaAPI(): WikipediaAPI {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://en.wikipedia.org/w/")
+            .baseUrl(wikipediaAPIbaseURL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        val wikipediaAPI = retrofit.create(WikipediaAPI::class.java)
+        return retrofit.create(WikipediaAPI::class.java)
+    }
+
+    private fun getArtistInfo() {
+
+        val wikipediaAPI = getWikipediaAPI()
 
         Thread {
             var text = DataBase.getInfo(dataBase, artistName)
