@@ -16,7 +16,6 @@ import android.widget.ImageView
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.view.ImageLoader
 import retrofit2.Response
-import java.io.IOException
 import java.lang.StringBuilder
 
 const val imageUrl =
@@ -84,11 +83,11 @@ class OtherInfoWindow : AppCompatActivity() {
         return retrofit.create(WikipediaAPI::class.java)
     }
 
-    private fun getArtistInfoFromLocal(): String?{
+    private fun getArtistInfoFromLocal(): String? {
         return DataBase.getInfo(dataBase, artistName)
     }
 
-    private fun jsonToArtistInfo(serviceData:String?): String {
+    private fun jsonToArtistInfo(serviceData: String?): String {
         val gson = Gson()
         val jobj = gson.fromJson(serviceData, JsonObject::class.java)
         val query = jobj["query"].asJsonObject
@@ -98,17 +97,17 @@ class OtherInfoWindow : AppCompatActivity() {
         return snippet.asString.replace("\\n", "\n")
     }
 
-    private fun getArtistInfoFromExternal(): String{
+    private fun getArtistInfoFromExternal(): String {
         val wikipediaAPI = getWikipediaAPI()
         var text = "No Results"
         return try {
             val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
             val snippet = jsonToArtistInfo(callResponse.body())
             if (snippet != "") {
-                text = textToHtml(text, artistName)
+                text = textToHtml(snippet, artistName)
             }
             text
-        } catch (e1: IOException) {
+        } catch (e1: Exception) {
             e1.printStackTrace()
             text
         }
@@ -119,8 +118,7 @@ class OtherInfoWindow : AppCompatActivity() {
             val artistInfoLocal = getArtistInfoFromLocal()
             if (artistInfoLocal != null) {
                 artistInfoText = "[*]$artistInfoLocal"
-            }
-            else {
+            } else {
                 val artistInfoExternal = getArtistInfoFromExternal()
                 artistInfoText = artistInfoExternal
                 DataBase.saveArtist(dataBase, artistName, artistInfoExternal)
