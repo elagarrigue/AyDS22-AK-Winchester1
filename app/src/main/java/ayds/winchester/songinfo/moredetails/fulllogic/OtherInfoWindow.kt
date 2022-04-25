@@ -8,8 +8,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import android.content.Intent
-import android.net.Uri
 import android.text.Html
 import android.widget.Button
 import android.widget.ImageView
@@ -25,11 +23,12 @@ const val wikipediaAPIbaseURL = "https://en.wikipedia.org/w/"
 
 class OtherInfoWindow : AppCompatActivity() {
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
-    private lateinit var textPane2: TextView
+    private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
     private lateinit var dataBase: DataBase
     private lateinit var artistName: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +49,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun initProperties() {
-        textPane2 = findViewById(R.id.textPane2)
+        artistInfoTextView = findViewById(R.id.textPane2)
         viewFullArticleButton = findViewById(R.id.openUrlButton)
         logoImageView = findViewById(R.id.imageView)
     }
@@ -82,49 +81,60 @@ class OtherInfoWindow : AppCompatActivity() {
         return retrofit.create(WikipediaAPI::class.java)
     }
 
+    private fun getArtistInfoFromLocal(): String?{
+        return DataBase.getInfo(dataBase, artistName)
+    }
+
+    private fun jsonToArtistInfo(serviceData:String?): String {
+        val gson = Gson()
+        val jobj = gson.fromJson(serviceData, JsonObject::class.java)
+        val query = jobj["query"].asJsonObject
+        val snippet = query["search"].asJsonArray[0].asJsonObject["snippet"]
+        val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
+        return snippet.asString.replace("\\n", "\n")
+    }
+
+    private fun getArtistInfoFromExternal(): String{
+        val wikipediaAPI = getWikipediaAPI()
+        var text = "No Results"
+        try {
+            val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
+            val snippet = jsonToArtistInfo(callResponse.body())
+            if (snippet != "") {
+                text = textToHtml(text, artistName)
+            }
+            return text
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+            return text
+        }
+    }
+
     private fun getArtistInfo() {
 
-        val wikipediaAPI = getWikipediaAPI()
-
         Thread {
-            var text = DataBase.getInfo(dataBase, artistName)
-            if (text != null) {
-                text = "[*]$text"
+            val text:String
+            val artistInfoLocal = getArtistInfoFromLocal()
+            if (artistInfoLocal != null) {
+                text = "[*]$artistInfoLocal"
             }
             else {
-                val callResponse: Response<String>
-                try {
-                    callResponse = wikipediaAPI.getArtistInfo(artistName).execute()
-                    val gson = Gson()
-                    val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
-                    val query = jobj["query"].asJsonObject
-                    val snippet = query["search"].asJsonArray[0].asJsonObject["snippet"]
-                    val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
-                    if (snippet == null) {
-                        text = "No Results"
-                    }
-                    else {
-                        text = snippet.asString.replace("\\n", "\n")
-                        text = textToHtml(text, artistName)
-                        DataBase.saveArtist(dataBase, artistName, text)
-                    }
-                    val urlString = "https://en.wikipedia.org/?curid=$pageid"
-                    viewFullArticleButton.setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse(urlString)
-                        startActivity(intent)
-                    }
-                } catch (e1: IOException) {
-                    e1.printStackTrace()
-                }
+                val artistInfoExternal = getArtistInfoFromExternal()
+//                val urlString = "https://en.wikipedia.org/?curid=$pageid"
+//                viewFullArticleButton.setOnClickListener {
+//                    val intent = Intent(Intent.ACTION_VIEW)
+//                    intent.data = Uri.parse(urlString)
+//                    startActivity(intent)
+//                }
+                text = artistInfoExternal
+                DataBase.saveArtist(dataBase, artistName, artistInfoExternal)
             }
-            val finalText = text
             runOnUiThread {
-                textPane2.text = Html.fromHtml(finalText)
+                artistInfoTextView.text = Html.fromHtml(text)
             }
         }.start()
     }
-    //To-do eliminar companion object
+
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
     }
