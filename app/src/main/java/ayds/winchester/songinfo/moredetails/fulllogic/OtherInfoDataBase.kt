@@ -9,7 +9,7 @@ import java.util.ArrayList
 private const val DATABASE_NAME = "dictionary.db"
 private const val DATABASE_VERSION = 1
 
-class DataBase(context: Context?
+class OtherInfoDataBase(context: Context?
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     private val projection = arrayOf(
