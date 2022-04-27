@@ -18,16 +18,16 @@ import ayds.winchester.songinfo.utils.view.ImageLoader
 import retrofit2.Response
 import java.lang.StringBuilder
 
-const val imageUrl =
+const val IMAGE_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-const val wikipediaAPIbaseURL = "https://en.wikipedia.org/w/"
+const val WIKIPEDIA_API_BASE_URL = "https://en.wikipedia.org/w/"
 
 class OtherInfoWindow : AppCompatActivity() {
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
-    private lateinit var dataBase: DataBase
+    private lateinit var dataBase: OtherInfoDataBase
     private lateinit var artistName: String
     private var pageid: String? = null
     private var artistInfoText: String? = null
@@ -43,7 +43,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun initDatabase() {
-        dataBase = DataBase(this)
+        dataBase = OtherInfoDataBase(this)
     }
 
     private fun loadArtistName() {
@@ -58,7 +58,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initLogoImage() {
         runOnUiThread {
-            imageLoader.loadImageIntoView(imageUrl, logoImageView)
+            imageLoader.loadImageIntoView(IMAGE_URL, logoImageView)
         }
     }
 
@@ -77,14 +77,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getWikipediaAPI(): WikipediaAPI {
         val retrofit = Retrofit.Builder()
-            .baseUrl(wikipediaAPIbaseURL)
+            .baseUrl(WIKIPEDIA_API_BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
         return retrofit.create(WikipediaAPI::class.java)
     }
 
     private fun getArtistInfoFromLocal(): String? {
-        return DataBase.getInfo(dataBase, artistName)
+        return dataBase.getInfo(artistName)
     }
 
     private fun jsonToArtistInfo(serviceData: String?): String {
@@ -121,7 +121,7 @@ class OtherInfoWindow : AppCompatActivity() {
             } else {
                 val artistInfoExternal = getArtistInfoFromExternal()
                 artistInfoText = artistInfoExternal
-                DataBase.saveArtist(dataBase, artistName, artistInfoExternal)
+                dataBase.saveArtist(artistName, artistInfoExternal)
             }
             updateUI()
         }.start()
