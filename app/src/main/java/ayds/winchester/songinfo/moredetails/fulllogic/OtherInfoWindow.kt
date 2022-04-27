@@ -36,7 +36,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var logoImageView: ImageView
     private lateinit var dataBase: OtherInfoDataBase
     private lateinit var artistName: String
-    private lateinit var wikipediaAPI : WikipediaAPI
+    private lateinit var wikipediaAPI: WikipediaAPI
     private var pageid: String? = null
     private var artistInfoText: String? = null
 
@@ -48,7 +48,7 @@ class OtherInfoWindow : AppCompatActivity() {
         initProperties()
         initLogoImage()
         initWikipediaApi()
-        getArtistInfo()
+        searchAction()
     }
 
     private fun initDatabase() {
@@ -123,15 +123,19 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfo() {
+        val artistInfoLocal = getArtistInfoFromLocal()
+        if (artistInfoLocal != null) {
+            artistInfoText = "$LOCALLY_SAVED_MARK$artistInfoLocal"
+        } else {
+            val artistInfoExternal = getArtistInfoFromExternal()
+            artistInfoText = artistInfoExternal
+            dataBase.saveArtist(artistName, artistInfoExternal)
+        }
+    }
+
+    private fun searchAction() {
         Thread {
-            val artistInfoLocal = getArtistInfoFromLocal()
-            if (artistInfoLocal != null) {
-                artistInfoText = "$LOCALLY_SAVED_MARK$artistInfoLocal"
-            } else {
-                val artistInfoExternal = getArtistInfoFromExternal()
-                artistInfoText = artistInfoExternal
-                dataBase.saveArtist(artistName, artistInfoExternal)
-            }
+            getArtistInfo()
             updateUI()
         }.start()
     }
@@ -144,7 +148,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun updateFullArticleButton() {
-        viewFullArticleButton.setOnClickListener {openFullArticle()}
+        viewFullArticleButton.setOnClickListener { openFullArticle() }
     }
 
     private fun openFullArticle() {
