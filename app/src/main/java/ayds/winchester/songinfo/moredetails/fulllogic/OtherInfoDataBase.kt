@@ -26,28 +26,38 @@ class OtherInfoDataBase(context: Context?
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
     fun saveArtist(artist: String?, info: String?) {
-            val values = ContentValues().apply {
-                put(ARTIST_COLUMN, artist)
-                put(INFO_COLUMN, info)
-                put(SOURCE_COLUMN, 1)
-            }
+            val values = createContentValues(artist,info)
             writableDatabase?.insert(ARTISTS_TABLE, null, values)
         }
 
-    fun getInfo(artist: String): String? {
-            val cursor = readableDatabase.query(
-                ARTISTS_TABLE,
-                projection,
-                "$ARTIST_COLUMN= ?",
-                arrayOf(artist),
-                null,
-                null,
-                "$ARTIST_COLUMN DESC"
-            )
-            val items = addInfoToList(cursor)
-            cursor.close()
-            return if (items.isEmpty()) null else items[0]
+    private fun createContentValues(artist: String?, info: String?) :ContentValues{
+        val ret = ContentValues().apply {
+            put(ARTIST_COLUMN, artist)
+            put(INFO_COLUMN, info)
+            put(SOURCE_COLUMN, 1)
         }
+        return ret
+    }
+
+    fun getInfo(artist: String): String? {
+            val cursor = createCursor(artist)
+            val items = addInfoToList(cursor)
+            return items.firstOrNull()
+        }
+
+    private fun createCursor(artist: String):Cursor{
+        val ret = readableDatabase.query(
+            ARTISTS_TABLE,
+            projection,
+            "$ARTIST_COLUMN= ?",
+            arrayOf(artist),
+            null,
+            null,
+            "$ARTIST_COLUMN DESC"
+        )
+
+        return ret
+    }
 
     private fun addInfoToList(cursor: Cursor): MutableList<String> {
         val items: MutableList<String> = ArrayList()
@@ -57,6 +67,7 @@ class OtherInfoDataBase(context: Context?
             )
             items.add(info)
         }
+        cursor.close()
         return items
     }
 }
