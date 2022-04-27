@@ -122,20 +122,20 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun getArtistInfo() {
+    private fun getArtistInfo():String {
         val artistInfoLocal = getArtistInfoFromLocal()
-        if (artistInfoLocal != null) {
-            artistInfoText = "$LOCALLY_SAVED_MARK$artistInfoLocal"
+        return if (artistInfoLocal != null) {
+            "$LOCALLY_SAVED_MARK$artistInfoLocal"
         } else {
             val artistInfoExternal = getArtistInfoFromExternal()
-            artistInfoText = artistInfoExternal
             dataBase.saveArtist(artistName, artistInfoExternal)
+            artistInfoExternal
         }
     }
 
     private fun searchAction() {
         Thread {
-            getArtistInfo()
+            artistInfoText = getArtistInfo()
             updateUI()
         }.start()
     }
