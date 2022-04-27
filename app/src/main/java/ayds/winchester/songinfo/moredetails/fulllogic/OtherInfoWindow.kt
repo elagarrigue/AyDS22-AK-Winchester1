@@ -108,19 +108,18 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfoFromExternal(): String {
-        var text = NO_RESULTS_TEXT
+        val resultText = NO_RESULTS_TEXT
         return try {
             val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
             val snippet = jsonToArtistInfo(callResponse.body())
-            if (snippet != "") {
-                text = textToHtml(snippet, artistName)
-            }
-            text
+            getExternalInfoSnippet(snippet)
         } catch (e1: Exception) {
             e1.printStackTrace()
-            text
+            resultText
         }
     }
+
+    private fun getExternalInfoSnippet(snippet : String) = if (snippet != "") textToHtml(snippet, artistName) else NO_RESULTS_TEXT
 
     private fun getArtistInfo():String {
         val artistInfoLocal = getArtistInfoFromLocal()
