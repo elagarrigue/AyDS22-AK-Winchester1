@@ -36,6 +36,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var logoImageView: ImageView
     private lateinit var dataBase: OtherInfoDataBase
     private lateinit var artistName: String
+    private lateinit var wikipediaAPI : WikipediaAPI
     private var pageid: String? = null
     private var artistInfoText: String? = null
 
@@ -46,11 +47,20 @@ class OtherInfoWindow : AppCompatActivity() {
         initDatabase()
         initProperties()
         initLogoImage()
+        initWikipediaApi()
         getArtistInfo()
     }
 
     private fun initDatabase() {
         dataBase = OtherInfoDataBase(this)
+    }
+
+    private fun initWikipediaApi() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(WIKIPEDIA_API_BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        wikipediaAPI = retrofit.create(WikipediaAPI::class.java)
     }
 
     private fun loadArtistName() {
@@ -82,14 +92,6 @@ class OtherInfoWindow : AppCompatActivity() {
         return builder.toString()
     }
 
-    private fun getWikipediaAPI(): WikipediaAPI {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(WIKIPEDIA_API_BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        return retrofit.create(WikipediaAPI::class.java)
-    }
-
     private fun getArtistInfoFromLocal(): String? {
         return dataBase.getInfo(artistName)
     }
@@ -106,7 +108,6 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfoFromExternal(): String {
-        val wikipediaAPI = getWikipediaAPI()
         var text = NO_RESULTS_TEXT
         return try {
             val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
