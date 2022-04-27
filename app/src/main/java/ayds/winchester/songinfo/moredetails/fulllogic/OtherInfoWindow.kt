@@ -18,9 +18,16 @@ import ayds.winchester.songinfo.utils.view.ImageLoader
 import retrofit2.Response
 import java.lang.StringBuilder
 
-const val IMAGE_URL =
+private const val IMAGE_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-const val WIKIPEDIA_API_BASE_URL = "https://en.wikipedia.org/w/"
+private const val WIKIPEDIA_API_BASE_URL = "https://en.wikipedia.org/w/"
+private const val NO_RESULTS_TEXT = "No Results"
+private const val LOCALLY_SAVED_MARK = "[*]"
+private const val FULL_ARTICLE_URL = "https://en.wikipedia.org/?curid="
+private const val SNIPPET = "snippet"
+private const val SEARCH = "search"
+private const val PAGEID = "pageid"
+private const val QUERY = "query"
 
 class OtherInfoWindow : AppCompatActivity() {
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
@@ -90,16 +97,17 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun jsonToArtistInfo(serviceData: String?): String {
         val gson = Gson()
         val jobj = gson.fromJson(serviceData, JsonObject::class.java)
-        val query = jobj["query"].asJsonObject
-        val snippet = query["search"].asJsonArray[0].asJsonObject["snippet"]
-        val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
+        val query = jobj[QUERY].asJsonObject
+        val search = query[SEARCH].asJsonArray[0]
+        val snippet = search.asJsonObject[SNIPPET]
+        val pageid = search.asJsonObject[PAGEID]
         this.pageid = pageid.asString
         return snippet.asString.replace("\\n", "\n")
     }
 
     private fun getArtistInfoFromExternal(): String {
         val wikipediaAPI = getWikipediaAPI()
-        var text = "No Results"
+        var text = NO_RESULTS_TEXT
         return try {
             val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
             val snippet = jsonToArtistInfo(callResponse.body())
@@ -117,7 +125,7 @@ class OtherInfoWindow : AppCompatActivity() {
         Thread {
             val artistInfoLocal = getArtistInfoFromLocal()
             if (artistInfoLocal != null) {
-                artistInfoText = "[*]$artistInfoLocal"
+                artistInfoText = "$LOCALLY_SAVED_MARK$artistInfoLocal"
             } else {
                 val artistInfoExternal = getArtistInfoFromExternal()
                 artistInfoText = artistInfoExternal
@@ -135,7 +143,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun updateFullArticleButton() {
-        val urlString = "https://en.wikipedia.org/?curid=$pageid"
+        val urlString = "$FULL_ARTICLE_URL$pageid"
         viewFullArticleButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(urlString)
