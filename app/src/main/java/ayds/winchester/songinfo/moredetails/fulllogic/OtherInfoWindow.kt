@@ -144,12 +144,14 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun updateFullArticleButton() {
+        viewFullArticleButton.setOnClickListener {openFullArticle()}
+    }
+
+    private fun openFullArticle() {
         val urlString = "$FULL_ARTICLE_URL$pageid"
-        viewFullArticleButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
-        }
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun updateArtistInfo() {
