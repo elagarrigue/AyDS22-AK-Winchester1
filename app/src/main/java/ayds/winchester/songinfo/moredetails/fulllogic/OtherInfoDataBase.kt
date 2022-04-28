@@ -10,8 +10,8 @@ import java.util.ArrayList
 private const val DATABASE_NAME = "dictionary.db"
 private const val DATABASE_VERSION = 1
 
-class OtherInfoDataBase(context: Context?
-) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class OtherInfoDataBase(context: Context?)
+    : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     private val projection = arrayOf(
         ID_COLUMN,
@@ -31,12 +31,12 @@ class OtherInfoDataBase(context: Context?
         }
 
     private fun createContentValues(artist: String?, info: String?) :ContentValues{
-        val ret = ContentValues().apply {
+        val values = ContentValues().apply {
             put(ARTIST_COLUMN, artist)
             put(INFO_COLUMN, info)
             put(SOURCE_COLUMN, 1)
         }
-        return ret
+        return values
     }
 
     fun getInfo(artist: String): String? {
@@ -46,7 +46,7 @@ class OtherInfoDataBase(context: Context?
         }
 
     private fun createCursor(artist: String):Cursor{
-        val ret = readableDatabase.query(
+        val cursor = readableDatabase.query(
             ARTISTS_TABLE,
             projection,
             "$ARTIST_COLUMN= ?",
@@ -56,7 +56,7 @@ class OtherInfoDataBase(context: Context?
             "$ARTIST_COLUMN DESC"
         )
 
-        return ret
+        return cursor
     }
 
     private fun addInfoToList(cursor: Cursor): MutableList<String> {

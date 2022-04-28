@@ -64,7 +64,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun loadArtistName() {
-        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)!!
+        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)?: ""
     }
 
     private fun initProperties() {
@@ -140,14 +140,14 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        if (pageid != null) {
-            updateFullArticleButton()
-        }
+        updateFullArticleButton()
         updateArtistInfo()
     }
 
     private fun updateFullArticleButton() {
-        viewFullArticleButton.setOnClickListener { openFullArticle() }
+        if (pageid != null) {
+            viewFullArticleButton.setOnClickListener { openFullArticle() }
+        }
     }
 
     private fun openFullArticle() {
