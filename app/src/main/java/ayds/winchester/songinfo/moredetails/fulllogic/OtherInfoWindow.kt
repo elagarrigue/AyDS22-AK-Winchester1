@@ -13,6 +13,8 @@ import com.google.gson.JsonObject
 import android.text.Html
 import android.widget.Button
 import android.widget.ImageView
+import ayds.winchester.songinfo.moredetails.fulllogic.model.database.OtherInfoDataBase
+import ayds.winchester.songinfo.moredetails.fulllogic.model.database.WikipediaAPI
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.view.ImageLoader
 import retrofit2.Response
