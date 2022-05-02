@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.fulllogic
+package ayds.winchester.songinfo.moredetails.fulllogic.model.database
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
