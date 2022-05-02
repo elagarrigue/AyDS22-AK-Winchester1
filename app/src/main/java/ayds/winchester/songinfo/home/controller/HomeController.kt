@@ -6,7 +6,6 @@ import ayds.winchester.songinfo.home.view.HomeView
 import ayds.observer.Observer
 
 interface HomeController {
-
     fun setHomeView(homeView: HomeView)
 }
 
