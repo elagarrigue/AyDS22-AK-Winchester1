@@ -28,6 +28,6 @@ internal class MoreDetailsControllerImpl(
         }
 
     private fun viewFullArticle() {
-
+        moreDetailsView.openFullArticle()
     }
 }

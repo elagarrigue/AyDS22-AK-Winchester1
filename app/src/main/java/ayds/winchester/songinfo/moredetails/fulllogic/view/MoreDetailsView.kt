@@ -38,6 +38,8 @@ private const val QUERY = "query"
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
     val uiState: MoreDetailsUiState
+
+    fun openFullArticle()
 }
 
 internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
@@ -128,7 +130,7 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         }
     }
 
-    private fun openFullArticle() {
+    override fun openFullArticle() {
         val urlString = "$FULL_ARTICLE_URL$pageid"
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(urlString)
