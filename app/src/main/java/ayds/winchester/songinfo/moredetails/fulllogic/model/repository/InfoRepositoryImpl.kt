@@ -1,6 +1,6 @@
-package ayds.winchester.songinfo.moredetails.fulllogic.model
+package ayds.winchester.songinfo.moredetails.fulllogic.model.repository
 
-import ayds.winchester.songinfo.moredetails.fulllogic.model.database.OtherInfoDataBase
+import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.OtherInfoDataBase
 
 interface InfoRepository {
     fun getArtistInfo(): String

@@ -13,8 +13,8 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.R
 import ayds.winchester.songinfo.moredetails.fulllogic.model.MoreDetailsModel
 import ayds.winchester.songinfo.moredetails.fulllogic.model.MoreDetailsModelInjector
-import ayds.winchester.songinfo.moredetails.fulllogic.model.database.OtherInfoDataBase
-import ayds.winchester.songinfo.moredetails.fulllogic.model.database.WikipediaAPI
+import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.OtherInfoDataBase
+import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.database.WikipediaAPI
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
@@ -26,14 +26,9 @@ import java.lang.StringBuilder
 
 private const val IMAGE_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-private const val WIKIPEDIA_API_BASE_URL = "https://en.wikipedia.org/w/"
 private const val NO_RESULTS_TEXT = "No Results"
 private const val LOCALLY_SAVED_MARK = "[*]"
 private const val FULL_ARTICLE_URL = "https://en.wikipedia.org/?curid="
-private const val SNIPPET = "snippet"
-private const val SEARCH = "search"
-private const val PAGEID = "pageid"
-private const val QUERY = "query"
 
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
@@ -54,7 +49,6 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     private lateinit var logoImageView: ImageView
     private lateinit var dataBase: OtherInfoDataBase
     private lateinit var artistName: String
-    private lateinit var wikipediaAPI: WikipediaAPI
     private var pageid: String? = null
     private var artistInfoText: String? = null
 
@@ -70,7 +64,6 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
 
         initArtistName()
         initDatabase()
-        initWikipediaApi()
         searchAction()
     }
 
@@ -113,15 +106,6 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     private fun initDatabase() {
         //Todo: Mover a Model initDatabase()
         dataBase = OtherInfoDataBase(this)
-    }
-
-    private fun initWikipediaApi() {
-        //Todo: Mover a Model initWikipediaApi()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(WIKIPEDIA_API_BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        wikipediaAPI = retrofit.create(WikipediaAPI::class.java)
     }
 
     private fun updateFullArticleButton() {

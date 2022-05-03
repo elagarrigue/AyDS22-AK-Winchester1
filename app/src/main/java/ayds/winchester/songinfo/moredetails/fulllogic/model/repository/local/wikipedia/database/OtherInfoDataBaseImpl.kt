@@ -1,10 +1,11 @@
-package ayds.winchester.songinfo.moredetails.fulllogic.model.database
+package ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.database
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.OtherInfoDataBase
 import java.util.ArrayList
 
 private const val DATABASE_NAME = "dictionary.db"
@@ -12,7 +13,7 @@ private const val DATABASE_VERSION = 1
 
 class OtherInfoDataBaseImpl(context: Context?)
     : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
-      OtherInfoDataBase {
+    OtherInfoDataBase {
 
     private val projection = arrayOf(
         ID_COLUMN,

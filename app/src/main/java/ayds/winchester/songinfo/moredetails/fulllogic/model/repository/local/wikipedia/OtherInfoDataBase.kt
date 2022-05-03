@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.fulllogic.model.database
+package ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia
 
 interface OtherInfoDataBase {
 
