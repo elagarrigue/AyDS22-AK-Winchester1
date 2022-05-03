@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.fulllogic
+package ayds.winchester.songinfo.moredetails.fulllogic.model.database
 
 const val ARTISTS_TABLE = "artists"
 const val ID_COLUMN = "id"
