@@ -10,11 +10,11 @@ internal class WikipediaArtistInfoServiceImpl (
     ) : WikipediaArtistInfoService {
 
         override fun getArtistInfo(artistName: String?): WikipediaArtistInfo? {
-            val callResponse = getSongFromService(artistName)
+            val callResponse = getArtistInfoFromService(artistName)
             return wikipediaToArtistInfoResolver.getArtistInfoFromExternalData(callResponse.body())
         }
 
-        private fun getSongFromService(query: String?): Response<String> {
+        private fun getArtistInfoFromService(query: String?): Response<String> {
             return wikipediaArtistInfoAPI.getArtistInfo(query)
                 .execute()
         }

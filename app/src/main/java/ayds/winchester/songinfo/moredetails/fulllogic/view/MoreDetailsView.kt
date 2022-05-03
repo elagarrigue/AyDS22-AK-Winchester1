@@ -121,46 +121,10 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         startActivity(intent)
     }
 
-    private fun getArtistInfo():String {
-        //Todo: Este metodo contiene logica de datos. Adaptar y mover a Model
-        val artistInfoLocal = getArtistInfoFromLocal()
-        return if (artistInfoLocal != null) {
-            "$LOCALLY_SAVED_MARK$artistInfoLocal"
-        } else {
-            val artistInfoExternal = getArtistInfoFromExternal()
-            dataBase.saveArtist(artistName, artistInfoExternal)
-            artistInfoExternal
-        }
-    }
 
     private fun getArtistInfoFromLocal(): String? {
         //Todo: Este metodo contiene logica de datos. Adaptar y mover a Model
         return dataBase.getInfo(artistName)
-    }
-
-    private fun jsonToArtistInfo(serviceData: String?): String {
-        //Todo: Este metodo contiene logica de datos. Adaptar y mover a Model
-        val gson = Gson()
-        val jobj = gson.fromJson(serviceData, JsonObject::class.java)
-        val query = jobj[QUERY].asJsonObject
-        val search = query[SEARCH].asJsonArray[0]
-        val snippet = search.asJsonObject[SNIPPET]
-        val pageid = search.asJsonObject[PAGEID]
-        this.pageid = pageid.asString
-        return snippet.asString.replace("\\n", "\n")
-    }
-
-    private fun getArtistInfoFromExternal(): String {
-        //Todo: Este metodo contiene logica de datos. Adaptar y mover a Model
-        val resultText = NO_RESULTS_TEXT
-        return try {
-            val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
-            val snippet = jsonToArtistInfo(callResponse.body())
-            getExternalInfoSnippet(snippet)
-        } catch (e1: Exception) {
-            e1.printStackTrace()
-            resultText
-        }
     }
 
     private fun getExternalInfoSnippet(snippet : String) = if (snippet != "") textToHtml(snippet, artistName) else NO_RESULTS_TEXT
@@ -169,19 +133,6 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         runOnUiThread {
             artistInfoTextView.text = Html.fromHtml(artistInfoText)
         }
-    }
-
-    private fun textToHtml(text: String, term: String?): String {
-        val builder = StringBuilder()
-        builder.append("<html><div width=400>")
-        builder.append("<font face=\"arial\">")
-        val textWithBold = text
-            .replace("'", " ")
-            .replace("\n", "<br>")
-            .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase() + "</b>")
-        builder.append(textWithBold)
-        builder.append("</font></div></html>")
-        return builder.toString()
     }
 
     companion object {
