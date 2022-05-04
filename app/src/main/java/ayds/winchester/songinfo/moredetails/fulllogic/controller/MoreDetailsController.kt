@@ -24,8 +24,15 @@ internal class MoreDetailsControllerImpl(
         Observer { value ->
             when (value) {
                 MoreDetailsUiEvent.ViewFullArticle -> viewFullArticle()
+                MoreDetailsUiEvent.Search -> searchArtist()
             }
         }
+
+    private fun searchArtist() {
+        Thread {
+            moreDetailsModel.searchArtistInfo(moreDetailsView.uiState.artistName)
+        }.start()
+    }
 
     private fun viewFullArticle() {
         moreDetailsView.openFullArticle()
