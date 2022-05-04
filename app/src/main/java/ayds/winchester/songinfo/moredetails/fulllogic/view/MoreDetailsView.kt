@@ -13,16 +13,12 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.R
 import ayds.winchester.songinfo.moredetails.fulllogic.model.MoreDetailsModel
 import ayds.winchester.songinfo.moredetails.fulllogic.model.MoreDetailsModelInjector
-import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.OtherInfoDataBase
-import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.database.WikipediaAPI
+import ayds.winchester.songinfo.moredetails.fulllogic.model.entities.ArtistInfo
+import ayds.winchester.songinfo.moredetails.fulllogic.model.entities.EmptyArtistInfo
+import ayds.winchester.songinfo.moredetails.fulllogic.model.entities.WikipediaArtistInfo
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.view.ImageLoader
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.lang.StringBuilder
+
 
 private const val IMAGE_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
@@ -47,10 +43,6 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
-    private lateinit var dataBase: OtherInfoDataBase
-    private lateinit var artistName: String
-    private var pageid: String? = null
-    private var artistInfoText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,10 +53,7 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         initListeners()
         initObservers()
         initLogoImage()
-
         initArtistName()
-        initDatabase()
-        searchAction()
     }
 
     private fun initModule() {
@@ -79,11 +68,41 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initListeners() {
-        updateFullArticleButton()
+        viewFullArticleButton.setOnClickListener { openFullArticle() }
     }
 
     private fun initObservers() {
+        moreDetailsModel.artistInfoObservable
+            .subscribe { value -> updateArtistInfo(value) }
 
+    }
+
+    private fun updateArtistInfo(artist: ArtistInfo) {
+        updateUiState(artist)
+        updateArtistInfo()
+        updateMoreDetailsState()
+    }
+
+    private fun updateUiState(artist: ArtistInfo) {
+        when (artist) {
+            is WikipediaArtistInfo -> updateArtistUiState(artist)
+            EmptyArtistInfo -> updateNoResultsUiState()
+        }
+    }
+
+    private fun updateArtistUiState(artist: ArtistInfo) {
+        uiState = uiState.copy(
+            pageid = artist.pageId,
+            info = artist.info,
+            actionsEnabled = true
+        )
+    }
+
+    private fun updateNoResultsUiState() {
+        uiState = uiState.copy(
+
+            actionsEnabled = false
+        )
     }
 
     private fun initLogoImage() {
@@ -92,46 +111,31 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         }
     }
 
-    fun searchAction() {
-        Thread {
-            artistInfoText = getArtistInfo()
-            updateArtistInfo()
-        }.start()
-    }
-
     private fun initArtistName() {
-        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)?: ""
-    }
-
-    private fun initDatabase() {
-        //Todo: Mover a Model initDatabase()
-        dataBase = OtherInfoDataBase(this)
-    }
-
-    private fun updateFullArticleButton() {
-        if (pageid != null) {
-            viewFullArticleButton.setOnClickListener { openFullArticle() }
-        }
+        val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)?: ""
+        uiState = uiState.copy(artistName = artistName)
     }
 
     override fun openFullArticle() {
-        val urlString = "$FULL_ARTICLE_URL$pageid"
+        val urlString = "$FULL_ARTICLE_URL${uiState.pageid}"
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(urlString)
         startActivity(intent)
     }
 
-
-    private fun getArtistInfoFromLocal(): String? {
-        //Todo: Este metodo contiene logica de datos. Adaptar y mover a Model
-        return dataBase.getInfo(artistName)
-    }
-
-    private fun getExternalInfoSnippet(snippet : String) = if (snippet != "") textToHtml(snippet, artistName) else NO_RESULTS_TEXT
-
     private fun updateArtistInfo() {
         runOnUiThread {
-            artistInfoTextView.text = Html.fromHtml(artistInfoText)
+            artistInfoTextView.text = Html.fromHtml(uiState.info)
+        }
+    }
+
+    private fun updateMoreDetailsState() {
+        enableActions(uiState.actionsEnabled)
+    }
+
+    private fun enableActions(enable: Boolean) {
+        runOnUiThread {
+            viewFullArticleButton.isEnabled = enable
         }
     }
 
