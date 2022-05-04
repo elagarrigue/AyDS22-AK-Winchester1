@@ -34,9 +34,9 @@ interface MoreDetailsView {
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
     private lateinit var moreDetailsModel: MoreDetailsModel
+    private val artistInfoHelper: ArtistInfoHelper = MoreDetailsViewInjector.artistInfoHelper
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
-
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
@@ -92,7 +92,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateArtistUiState(artist: ArtistInfo) {
         uiState = uiState.copy(
             pageid = artist.pageId,
-            info = artist.info,
+            info = artistInfoHelper.artistInfoTextToHtml(artist.info, uiState.artistName) ,
             actionsEnabled = true
         )
     }

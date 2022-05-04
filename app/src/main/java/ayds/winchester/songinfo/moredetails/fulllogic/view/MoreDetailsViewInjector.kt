@@ -5,6 +5,9 @@ import ayds.winchester.songinfo.moredetails.fulllogic.model.MoreDetailsModelInje
 
 object MoreDetailsViewInjector {
 
+    val artistInfoHelper: ArtistInfoHelper =
+        ArtistInfoHelperImpl()
+
     fun init(moreDetailsView: MoreDetailsView) {
         MoreDetailsModelInjector.initMoreDetailsModel(moreDetailsView)
         MoreDetailsControllerInjector.onViewStarted(moreDetailsView)

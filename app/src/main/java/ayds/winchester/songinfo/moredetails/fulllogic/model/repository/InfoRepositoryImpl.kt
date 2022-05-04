@@ -5,7 +5,6 @@ import ayds.winchester.songinfo.moredetails.fulllogic.model.entities.EmptyArtist
 import ayds.winchester.songinfo.moredetails.fulllogic.model.entities.WikipediaArtistInfo
 import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.external.wikipedia.WikipediaArtistInfoService
 import ayds.winchester.songinfo.moredetails.fulllogic.model.repository.local.wikipedia.OtherInfoDataBase
-import java.lang.StringBuilder
 
 interface InfoRepository {
 
@@ -26,7 +25,6 @@ internal class InfoRepositoryImpl(
                 try {
                     artistInfo = wikipediaArtistInfoService.getArtistInfo(artistName)
                     artistInfo?.let {
-                        it.info = textToHtml(it.info, artistName)
                         wikipediaLocalStorage.saveArtist(artistName, it)
                     }
                 } catch (e: Exception) {
@@ -40,19 +38,6 @@ internal class InfoRepositoryImpl(
 
     private fun markArtistInfoAsLocal(artistInfo: WikipediaArtistInfo) {
         artistInfo.isLocallyStored = true
-    }
-
-    private fun textToHtml(text: String, term: String?): String {
-        val builder = StringBuilder()
-        builder.append("<html><div width=400>")
-        builder.append("<font face=\"arial\">")
-        val textWithBold = text
-            .replace("'", " ")
-            .replace("\n", "<br>")
-            .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase() + "</b>")
-        builder.append(textWithBold)
-        builder.append("</font></div></html>")
-        return builder.toString()
     }
 
 }
