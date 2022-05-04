@@ -4,6 +4,7 @@ import ayds.winchester.songinfo.moredetails.fulllogic.controller.MoreDetailsCont
 import ayds.winchester.songinfo.moredetails.fulllogic.model.MoreDetailsModelInjector
 
 object MoreDetailsViewInjector {
+
     fun init(moreDetailsView: MoreDetailsView) {
         MoreDetailsModelInjector.initMoreDetailsModel(moreDetailsView)
         MoreDetailsControllerInjector.onViewStarted(moreDetailsView)

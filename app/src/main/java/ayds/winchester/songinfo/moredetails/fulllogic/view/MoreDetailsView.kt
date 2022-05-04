@@ -22,8 +22,6 @@ import ayds.winchester.songinfo.utils.view.ImageLoader
 
 private const val IMAGE_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-private const val NO_RESULTS_TEXT = "No Results"
-private const val LOCALLY_SAVED_MARK = "[*]"
 private const val FULL_ARTICLE_URL = "https://en.wikipedia.org/?curid="
 
 interface MoreDetailsView {
@@ -33,9 +31,9 @@ interface MoreDetailsView {
     fun openFullArticle()
 }
 
-internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
+class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
-    private lateinit var moreDetailsModel : MoreDetailsModel
+    private lateinit var moreDetailsModel: MoreDetailsModel
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
 
@@ -46,7 +44,7 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_other_info)
 
         initModule()
         initProperties()
@@ -54,6 +52,7 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         initObservers()
         initLogoImage()
         initArtistName()
+        notifySearchArtistInfoAction()
     }
 
     private fun initModule() {
@@ -100,7 +99,6 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
 
     private fun updateNoResultsUiState() {
         uiState = uiState.copy(
-
             actionsEnabled = false
         )
     }
@@ -112,7 +110,7 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initArtistName() {
-        val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)?: ""
+        val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA) ?: ""
         uiState = uiState.copy(artistName = artistName)
     }
 
@@ -137,6 +135,10 @@ internal class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         runOnUiThread {
             viewFullArticleButton.isEnabled = enable
         }
+    }
+
+    private fun notifySearchArtistInfoAction() {
+        onActionSubject.notify(MoreDetailsUiEvent.Search)
     }
 
     companion object {
