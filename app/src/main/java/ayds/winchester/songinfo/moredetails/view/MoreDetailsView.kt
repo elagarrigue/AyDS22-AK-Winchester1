@@ -19,9 +19,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.view.ImageLoader
 
-
-private const val IMAGE_URL =
-    "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+private const val IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 private const val FULL_ARTICLE_URL = "https://en.wikipedia.org/?curid="
 
 interface MoreDetailsView {

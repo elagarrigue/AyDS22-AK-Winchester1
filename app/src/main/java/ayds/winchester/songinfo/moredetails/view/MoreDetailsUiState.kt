@@ -5,5 +5,4 @@ data class MoreDetailsUiState(
     val info: String = "",
     val pageid: String = "",
     val actionsEnabled: Boolean = false,
-){
-}
+)
