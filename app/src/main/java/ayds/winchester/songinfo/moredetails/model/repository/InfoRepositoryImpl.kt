@@ -7,7 +7,6 @@ import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.OtherInfoDataBase
 
 interface InfoRepository {
-
     fun getArtistInfoByName(artistName: String): ArtistInfo
 }
 
@@ -18,7 +17,6 @@ internal class InfoRepositoryImpl(
 
     override fun getArtistInfoByName(artistName: String) : ArtistInfo {
         var artistInfo = wikipediaLocalStorage.getArtistInfoByName(artistName)
-
         when {
             artistInfo != null -> markArtistInfoAsLocal(artistInfo)
             else -> {
@@ -32,12 +30,10 @@ internal class InfoRepositoryImpl(
                 }
             }
         }
-
         return artistInfo ?: EmptyArtistInfo
     }
 
     private fun markArtistInfoAsLocal(artistInfo: WikipediaArtistInfo) {
         artistInfo.isLocallyStored = true
     }
-
 }

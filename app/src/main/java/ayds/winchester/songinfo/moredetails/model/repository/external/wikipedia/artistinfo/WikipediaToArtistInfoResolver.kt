@@ -4,14 +4,14 @@ import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
-interface WikipediaToArtistInfoResolver {
-    fun getArtistInfoFromExternalData(artistName: String?): WikipediaArtistInfo?
-}
-
 private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
 private const val PAGE_ID = "pageid"
 private const val QUERY = "query"
+
+interface WikipediaToArtistInfoResolver {
+    fun getArtistInfoFromExternalData(artistName: String?): WikipediaArtistInfo?
+}
 
 internal class JsonToArtistInfoResolver() : WikipediaToArtistInfoResolver {
 
@@ -34,5 +34,4 @@ internal class JsonToArtistInfoResolver() : WikipediaToArtistInfoResolver {
     private fun JsonObject.getInfo() : String = this[SNIPPET].asString.replace("\\n", "\n")
 
     private fun JsonObject.getPageId() : String = this[PAGE_ID].asString
-
 }

@@ -6,7 +6,6 @@ import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
 import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
 
 interface MoreDetailsModel {
-
     val artistInfoObservable: Observable<ArtistInfo>
 
     fun searchArtistInfo(artistName: String)
@@ -21,6 +20,4 @@ internal class MoreDetailsModelImpl(private val repository: InfoRepository) : Mo
             artistInfoObservable.notify(it)
         }
     }
-
-
 }

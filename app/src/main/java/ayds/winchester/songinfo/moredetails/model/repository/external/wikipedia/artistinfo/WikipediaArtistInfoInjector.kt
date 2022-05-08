@@ -13,10 +13,8 @@ object WikipediaArtistInfoInjector {
         .build()
     private val wikipediaArtistInfoAPI = wikipediaAPIRetrofit.create(WikipediaArtistInfoAPI::class.java)
     private val wikipediaToArtistInfoResolver: WikipediaToArtistInfoResolver = JsonToArtistInfoResolver()
-
     val wikipediaArtistInfoService: WikipediaArtistInfoService = WikipediaArtistInfoServiceImpl(
         wikipediaArtistInfoAPI,
         wikipediaToArtistInfoResolver
     )
-
 }

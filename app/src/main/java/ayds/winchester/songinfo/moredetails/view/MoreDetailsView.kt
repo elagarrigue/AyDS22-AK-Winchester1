@@ -33,11 +33,11 @@ interface MoreDetailsView {
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
-    private lateinit var moreDetailsModel: MoreDetailsModel
-    private val artistInfoHelper: ArtistInfoHelper = MoreDetailsViewInjector.artistInfoHelper
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
+    private val artistInfoHelper: ArtistInfoHelper = MoreDetailsViewInjector.artistInfoHelper
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
+    private lateinit var moreDetailsModel: MoreDetailsModel
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
@@ -45,7 +45,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-
         initModule()
         initProperties()
         initListeners()
@@ -53,6 +52,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         initLogoImage()
         initArtistName()
         notifySearchArtistInfoAction()
+    }
+
+    override fun openFullArticle() {
+        val urlString = "$FULL_ARTICLE_URL${uiState.pageid}"
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun initModule() {
@@ -103,24 +109,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         )
     }
 
-    private fun initLogoImage() {
-        runOnUiThread {
-            imageLoader.loadImageIntoView(IMAGE_URL, logoImageView)
-        }
-    }
-
-    private fun initArtistName() {
-        val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA) ?: ""
-        uiState = uiState.copy(artistName = artistName)
-    }
-
-    override fun openFullArticle() {
-        val urlString = "$FULL_ARTICLE_URL${uiState.pageid}"
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(urlString)
-        startActivity(intent)
-    }
-
     private fun updateArtistInfo() {
         runOnUiThread {
             artistInfoTextView.text = Html.fromHtml(uiState.info)
@@ -135,6 +123,17 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         runOnUiThread {
             viewFullArticleButton.isEnabled = enable
         }
+    }
+
+    private fun initLogoImage() {
+        runOnUiThread {
+            imageLoader.loadImageIntoView(IMAGE_URL, logoImageView)
+        }
+    }
+
+    private fun initArtistName() {
+        val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA) ?: ""
+        uiState = uiState.copy(artistName = artistName)
     }
 
     private fun notifySearchArtistInfoAction() {

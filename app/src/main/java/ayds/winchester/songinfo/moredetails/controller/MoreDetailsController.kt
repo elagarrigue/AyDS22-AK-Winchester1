@@ -28,13 +28,13 @@ internal class MoreDetailsControllerImpl(
             }
         }
 
+    private fun viewFullArticle() {
+        moreDetailsView.openFullArticle()
+    }
+
     private fun searchArtist() {
         Thread {
             moreDetailsModel.searchArtistInfo(moreDetailsView.uiState.artistName)
         }.start()
-    }
-
-    private fun viewFullArticle() {
-        moreDetailsView.openFullArticle()
     }
 }

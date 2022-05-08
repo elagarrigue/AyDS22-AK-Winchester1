@@ -11,7 +11,6 @@ import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.dat
 import ayds.winchester.songinfo.moredetails.view.MoreDetailsView
 
 object MoreDetailsModelInjector {
-
     private lateinit var moreDetailsModel: MoreDetailsModel
 
     fun getMoreDetailsModel(): MoreDetailsModel = moreDetailsModel
@@ -21,10 +20,8 @@ object MoreDetailsModelInjector {
             moreDetailsView as Context, CursorToWikipediaArtistInfoMapperImpl()
         )
         val wikipediaArtistInfoService: WikipediaArtistInfoService = WikipediaInjector.wikipediaArtistInfoService
-
         val repository: InfoRepository =
             InfoRepositoryImpl(otherInfoDataBase, wikipediaArtistInfoService)
-
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }
 }

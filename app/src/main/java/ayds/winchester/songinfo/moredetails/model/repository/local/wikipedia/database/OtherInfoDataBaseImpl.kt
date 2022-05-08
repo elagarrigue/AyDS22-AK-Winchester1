@@ -24,6 +24,7 @@ class OtherInfoDataBaseImpl(
         SOURCE_COLUMN,
         ARTIST_PAGE_ID_COLUMN
     )
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(createArtistTableQuery)
     }

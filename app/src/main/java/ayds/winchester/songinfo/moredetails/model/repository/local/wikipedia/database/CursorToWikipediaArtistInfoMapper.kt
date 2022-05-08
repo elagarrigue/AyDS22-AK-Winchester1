@@ -5,7 +5,6 @@ import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
 import java.sql.SQLException
 
 interface CursorToWikipediaArtistInfoMapper {
-
     fun map(cursor: Cursor): WikipediaArtistInfo?
 }
 
