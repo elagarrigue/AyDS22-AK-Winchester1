@@ -11,7 +11,7 @@ import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.Oth
 private const val DATABASE_NAME = "dictionary.db"
 private const val DATABASE_VERSION = 1
 
-class OtherInfoDataBaseImpl(
+internal class OtherInfoDataBaseImpl(
     context: Context,
     private val cursorToWikipediaArtistInfo: CursorToWikipediaArtistInfoMapper,
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
