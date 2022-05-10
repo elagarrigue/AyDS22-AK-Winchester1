@@ -19,9 +19,6 @@ import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.view.ImageLoader
 
-private const val IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-private const val FULL_ARTICLE_URL = "https://en.wikipedia.org/?curid="
-
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
     val uiState: MoreDetailsUiState
@@ -53,7 +50,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     override fun openFullArticle() {
-        val urlString = "$FULL_ARTICLE_URL${uiState.pageid}"
+        val urlString = "${uiState.FULL_ARTICLE_URL}${uiState.pageid}"
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(urlString)
         startActivity(intent)
@@ -125,7 +122,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initLogoImage() {
         runOnUiThread {
-            imageLoader.loadImageIntoView(IMAGE_URL, logoImageView)
+            imageLoader.loadImageIntoView(uiState.IMAGE_URL, logoImageView)
         }
     }
 
