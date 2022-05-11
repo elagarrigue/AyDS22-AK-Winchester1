@@ -34,7 +34,7 @@ internal class OtherInfoDataBaseImpl(
     override fun saveArtist(artistName: String?, artistInfo: WikipediaArtistInfo) {
             val values = createContentValues(artistName,artistInfo)
             writableDatabase?.insert(ARTISTS_TABLE, null, values)
-        }
+    }
 
     private fun createContentValues(artistName: String?, artistInfo: WikipediaArtistInfo) :ContentValues{
         val values = ContentValues().apply {

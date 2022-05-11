@@ -1,7 +1,5 @@
 package ayds.winchester.songinfo.moredetails.view
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.widget.Button
@@ -17,6 +15,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyArtistInfo
 import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
 import ayds.winchester.songinfo.utils.UtilsInjector
+import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 import ayds.winchester.songinfo.utils.view.ImageLoader
 
 interface MoreDetailsView {
@@ -32,6 +31,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
     private val artistInfoHelper: ArtistInfoHelper = MoreDetailsViewInjector.artistInfoHelper
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
+    private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private lateinit var moreDetailsModel: MoreDetailsModel
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
@@ -50,10 +50,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     override fun openFullArticle() {
-        val urlString = "${uiState.FULL_ARTICLE_URL}${uiState.pageid}"
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(urlString)
-        startActivity(intent)
+        navigationUtils.openExternalUrl(this, uiState.pageUrl)
     }
 
     private fun initModule() {
@@ -92,7 +89,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistUiState(artist: ArtistInfo) {
         uiState = uiState.copy(
-            pageid = artist.pageId,
+            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.pageId}",
             info = artistInfoHelper.artistInfoTextToHtml(artist.info, uiState.artistName) ,
             actionsEnabled = true
         )
