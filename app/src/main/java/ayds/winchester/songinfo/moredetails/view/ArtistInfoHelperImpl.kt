@@ -6,7 +6,7 @@ interface ArtistInfoHelper {
     fun artistInfoTextToHtml(info: String, artistName: String?): String
 }
 
-internal class ArtistInfoHelperImpl() : ArtistInfoHelper {
+internal class ArtistInfoHelperImpl : ArtistInfoHelper {
 
     override fun artistInfoTextToHtml(info: String, artistName: String?): String {
         val builder = StringBuilder()

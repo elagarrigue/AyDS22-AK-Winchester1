@@ -3,7 +3,7 @@ package ayds.winchester.songinfo.moredetails.model.entities
 private const val NO_RESULTS = "No results"
 
 interface ArtistInfo {
-    var info: String
+    val info: String
     val pageId: String
     var isLocallyStored: Boolean
 }
