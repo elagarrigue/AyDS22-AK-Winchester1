@@ -65,7 +65,11 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initListeners() {
-        viewFullArticleButton.setOnClickListener { openFullArticle() }
+        viewFullArticleButton.setOnClickListener { notifyOpenFullArticleAction() }
+    }
+
+    private fun notifyOpenFullArticleAction() {
+        onActionSubject.notify(MoreDetailsUiEvent.ViewFullArticle)
     }
 
     private fun initObservers() {
