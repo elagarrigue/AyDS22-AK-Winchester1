@@ -6,7 +6,6 @@ import ayds.winchester.songinfo.home.view.HomeView
 import ayds.observer.Observer
 
 interface HomeController {
-
     fun setHomeView(homeView: HomeView)
 }
 
@@ -32,8 +31,8 @@ internal class HomeControllerImpl(
 
 
     private fun searchSong() {
-        // Warning: Never use Thread in android! Use coroutines
         Thread {
+            // Warning: Never use Thread in android! Use coroutines
             homeModel.searchSong(homeView.uiState.searchTerm)
         }.start()
     }
