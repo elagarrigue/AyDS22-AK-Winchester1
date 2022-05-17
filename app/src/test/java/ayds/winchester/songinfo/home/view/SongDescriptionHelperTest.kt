@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.home.view
 
+import ayds.winchester.songinfo.home.model.entities.DatePrecision
 import ayds.winchester.songinfo.home.model.entities.Song
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 import io.mockk.mockk
@@ -8,7 +9,7 @@ import org.junit.Test
 
 class SongDescriptionHelperTest {
 
-    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl() }
+    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(mockk()) }
 
     @Test
     fun `given a local song it should return the description`() {
@@ -18,6 +19,7 @@ class SongDescriptionHelperTest {
             "Stone Temple Pilots",
             "Core",
             "1992-01-01",
+            DatePrecision.YEAR,
             "url",
             "url",
             true,
@@ -42,6 +44,7 @@ class SongDescriptionHelperTest {
             "Stone Temple Pilots",
             "Core",
             "1992-01-01",
+            DatePrecision.YEAR,
             "url",
             "url",
             false,
