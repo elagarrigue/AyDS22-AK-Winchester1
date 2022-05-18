@@ -9,7 +9,8 @@ import org.junit.Test
 
 class SongDescriptionHelperTest {
 
-    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(mockk()) }
+    private val dateFormat: SongDateFormat = mockk()
+    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(dateFormat) }
 
     @Test
     fun `given a local song it should return the description`() {
@@ -24,7 +25,7 @@ class SongDescriptionHelperTest {
             "url",
             true,
         )
-
+        //TODO implementar el every de songDescriptionHelper
         val result = songDescriptionHelper.getSongDescriptionText(song)
 
         val expected =
@@ -49,7 +50,7 @@ class SongDescriptionHelperTest {
             "url",
             false,
         )
-
+        //TODO implementar el every de songDescriptionHelper
         val result = songDescriptionHelper.getSongDescriptionText(song)
 
         val expected =
