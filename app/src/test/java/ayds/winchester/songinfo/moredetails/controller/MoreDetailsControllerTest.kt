@@ -32,18 +32,14 @@ class MoreDetailsControllerTest {
     @Test
     fun `on search event should search artist`() {
         every { moreDetailsView.uiState } returns MoreDetailsUiState(artistName = "artist")
-
         onActionSubject.notify(MoreDetailsUiEvent.Search)
-
         verify { moreDetailsModel.searchArtistInfo("artist") }
     }
 
     @Test
     fun `on view full article event should open external link`() {
         every { moreDetailsView.uiState } returns MoreDetailsUiState()
-
         onActionSubject.notify(MoreDetailsUiEvent.ViewFullArticle)
-
         verify { moreDetailsView.openFullArticle() }
     }
 }
