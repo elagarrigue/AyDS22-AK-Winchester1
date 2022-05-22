@@ -9,8 +9,7 @@ import org.junit.Test
 
 class SongDescriptionHelperTest {
 
-    private val dateFormat: SongDateFormat = mockk()
-    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(dateFormat) }
+    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(SongDateFormatImpl()) }
 
     @Test
     fun `given a local song it should return the description`() {
@@ -20,19 +19,19 @@ class SongDescriptionHelperTest {
             "Stone Temple Pilots",
             "Core",
             "1992-01-01",
-            DatePrecision.YEAR,
+            DatePrecision.DAY,
             "url",
             "url",
             true,
         )
-        //TODO implementar el every de songDescriptionHelper
+
         val result = songDescriptionHelper.getSongDescriptionText(song)
 
         val expected =
             "Song: Plush [*]\n" +
                     "Artist: Stone Temple Pilots\n" +
                     "Album: Core\n" +
-                    "Year: 1992"
+                    "Release Date: 01/01/1992"
 
         Assert.assertEquals(expected, result)
     }
@@ -45,19 +44,19 @@ class SongDescriptionHelperTest {
             "Stone Temple Pilots",
             "Core",
             "1992-01-01",
-            DatePrecision.YEAR,
+            DatePrecision.DAY,
             "url",
             "url",
             false,
         )
-        //TODO implementar el every de songDescriptionHelper
+
         val result = songDescriptionHelper.getSongDescriptionText(song)
 
         val expected =
             "Song: Plush \n" +
                     "Artist: Stone Temple Pilots\n" +
                     "Album: Core\n" +
-                    "Year: 1992"
+                    "Release Date: 01/01/1992"
 
         Assert.assertEquals(expected, result)
     }
