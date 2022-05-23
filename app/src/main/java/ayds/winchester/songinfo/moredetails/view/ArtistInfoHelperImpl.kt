@@ -25,7 +25,7 @@ internal class ArtistInfoHelperImpl : ArtistInfoHelper {
             .replace(SINGLE_QUOTE, SPACE)
             .replace(OLD_LINE_BREAK, BR_TAG)
             .replace(
-                I_TAG + artistName.toRegex(),
+                (I_TAG + artistName).toRegex(),
                 OPEN_B_TAG + artistName.uppercase() + CLOSE_B_TAG
             )
     }
