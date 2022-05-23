@@ -1,5 +1,7 @@
 package ayds.winchester.songinfo.moredetails.view
 
+import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
 import java.lang.StringBuilder
 
 const val OPEN_HTML_TAG = "<html><div width=400><font face=\"arial\">"
@@ -13,7 +15,7 @@ const val SINGLE_QUOTE = "'"
 const val SPACE = " "
 
 interface ArtistInfoHelper {
-    fun artistInfoTextToHtml(info: String, artistName: String): String
+    fun artistInfoTextToHtml(artistInfo: ArtistInfo, artistName: String): String
 }
 
 internal class ArtistInfoHelperImpl : ArtistInfoHelper {
@@ -36,8 +38,14 @@ internal class ArtistInfoHelperImpl : ArtistInfoHelper {
         return builder.toString()
     }
 
-    override fun artistInfoTextToHtml(info: String, artistName: String): String {
-        val textWithBold = addBoldToInfo(info, artistName)
-        return buildHtml(textWithBold)
+    override fun artistInfoTextToHtml(artistInfo: ArtistInfo, artistName: String): String {
+        return when (artistInfo) {
+            is WikipediaArtistInfo -> {
+                val info = (if (artistInfo.isLocallyStored) "[*]" else "") + artistInfo.info
+                val textWithBold = addBoldToInfo(info, artistName)
+                return buildHtml(textWithBold)
+            }
+            else -> "Artist not found"
+        }
     }
 }
