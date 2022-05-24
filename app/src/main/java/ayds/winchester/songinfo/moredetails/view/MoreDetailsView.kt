@@ -94,7 +94,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateArtistUiState(artist: ArtistInfo) {
         uiState = uiState.copy(
             pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.pageId}",
-            info = artistInfoHelper.artistInfoTextToHtml(artist.info, uiState.artistName) ,
+            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName) ,
             actionsEnabled = true
         )
     }
