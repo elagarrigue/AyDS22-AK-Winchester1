@@ -13,6 +13,8 @@ const val I_TAG = "(?i)"
 const val OLD_LINE_BREAK = "\n"
 const val SINGLE_QUOTE = "'"
 const val SPACE = " "
+const val STORED = "[*]"
+const val NOT_FOUND = "Artist not found"
 
 interface ArtistInfoHelper {
     fun artistInfoTextToHtml(artistInfo: ArtistInfo, artistName: String): String
@@ -41,11 +43,11 @@ internal class ArtistInfoHelperImpl : ArtistInfoHelper {
     override fun artistInfoTextToHtml(artistInfo: ArtistInfo, artistName: String): String {
         return when (artistInfo) {
             is WikipediaArtistInfo -> {
-                val info = (if (artistInfo.isLocallyStored) "[*]" else "") + artistInfo.info
+                val info = (if (artistInfo.isLocallyStored) STORED else SPACE) + artistInfo.info
                 val textWithBold = addBoldToInfo(info, artistName)
                 return buildHtml(textWithBold)
             }
-            else -> "Artist not found"
+            else -> NOT_FOUND
         }
     }
 }
