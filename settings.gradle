@@ -1,3 +1,5 @@
 include ':app'
 include 'observer'
+include ':SpotifyData'
+project(':SpotifyData').projectDir = new File('libs/SpotifyData')
 rootProject.name = "AK Winchester"
