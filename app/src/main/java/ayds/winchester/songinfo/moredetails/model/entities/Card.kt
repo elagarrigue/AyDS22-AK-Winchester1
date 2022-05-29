@@ -7,10 +7,10 @@ interface Card {
     val infoURL: String
     val source: String
     val sourceLogoURL: String
-    val isLocallyStored: Boolean
+    var isLocallyStored: Boolean
 }
 
-data class CardArtistInfo(
+data class WikipediaCard(
     override val description: String,
     override val infoURL: String,
     override val source: String,

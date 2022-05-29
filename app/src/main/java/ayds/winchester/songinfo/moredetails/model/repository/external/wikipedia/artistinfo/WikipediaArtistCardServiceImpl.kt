@@ -1,17 +1,17 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.artistinfo
 
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaArtistInfoService
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
+import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaCardService
 import retrofit2.Response
 
-internal class WikipediaArtistInfoServiceImpl (
+internal class WikipediaArtistCardServiceImpl (
     private val wikipediaArtistInfoAPI: WikipediaArtistInfoAPI,
     private val wikipediaToArtistInfoResolver: WikipediaToArtistInfoResolver,
-    ) : WikipediaArtistInfoService {
+    ) : WikipediaCardService {
 
-        override fun getArtistInfo(artistName: String?): WikipediaArtistInfo? {
+        override fun getCard(artistName: String?): WikipediaCard? {
             val callResponse = getArtistInfoFromService(artistName)
-            return wikipediaToArtistInfoResolver.getArtistInfoFromExternalData(callResponse.body())
+            return wikipediaToArtistInfoResolver.getCardFromExternalData(callResponse.body())
         }
 
         private fun getArtistInfoFromService(query: String?): Response<String> {

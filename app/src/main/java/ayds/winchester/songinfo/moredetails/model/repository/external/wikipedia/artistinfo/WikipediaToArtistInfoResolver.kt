@@ -1,6 +1,6 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.artistinfo
 
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
@@ -10,15 +10,20 @@ private const val PAGE_ID = "pageid"
 private const val QUERY = "query"
 
 interface WikipediaToArtistInfoResolver {
-    fun getArtistInfoFromExternalData(artistName: String?): WikipediaArtistInfo?
+    fun getCardFromExternalData(serviceData: String?): WikipediaCard?
 }
 
 internal class JsonToArtistInfoResolver() : WikipediaToArtistInfoResolver {
 
-    override fun getArtistInfoFromExternalData(serviceData: String?): WikipediaArtistInfo? =
+    override fun getCardFromExternalData(serviceData: String?): WikipediaCard? =
         try {
             serviceData?.getFirstItem()?.let { item ->
-                WikipediaArtistInfo(item.getInfo(), item.getPageId())
+                WikipediaCard(
+                    item.getInfo(),
+                    item.getPageId(),
+                    "",
+                    ""
+                )
             }
         } catch (e: Exception) {
             null

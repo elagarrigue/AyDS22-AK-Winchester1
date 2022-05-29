@@ -11,9 +11,9 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.R
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModel
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 import ayds.winchester.songinfo.utils.view.ImageLoader
@@ -73,27 +73,27 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initObservers() {
-        moreDetailsModel.artistInfoObservable
+        moreDetailsModel.cardObservable
             .subscribe { value -> updateArtistInfo(value) }
 
     }
 
-    private fun updateArtistInfo(artist: ArtistInfo) {
+    private fun updateArtistInfo(artist: Card) {
         updateUiState(artist)
         updateArtistInfo()
         updateMoreDetailsState()
     }
 
-    private fun updateUiState(artist: ArtistInfo) {
+    private fun updateUiState(artist: Card) {
         when (artist) {
-            is WikipediaArtistInfo -> updateArtistUiState(artist)
-            EmptyArtistInfo -> updateNoResultsUiState()
+            is WikipediaCard -> updateArtistUiState(artist)
+            EmptyCard -> updateNoResultsUiState()
         }
     }
 
-    private fun updateArtistUiState(artist: ArtistInfo) {
+    private fun updateArtistUiState(artist: Card) {
         uiState = uiState.copy(
-            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.pageId}",
+            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.infoURL}",
             info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName) ,
             actionsEnabled = true
         )

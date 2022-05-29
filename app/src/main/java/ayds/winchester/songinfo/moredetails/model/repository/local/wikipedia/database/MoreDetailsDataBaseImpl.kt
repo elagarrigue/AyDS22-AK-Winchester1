@@ -5,17 +5,17 @@ import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.OtherInfoDataBase
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
+import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
 private const val DATABASE_NAME = "dictionary.db"
 private const val DATABASE_VERSION = 1
 
-internal class OtherInfoDataBaseImpl(
+internal class MoreDetailsDataBaseImpl(
     context: Context,
-    private val cursorToWikipediaArtistInfo: CursorToWikipediaArtistInfoMapper,
+    private val cursorToWikipediaCard: CursorToWikipediaCardMapper,
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
-    OtherInfoDataBase {
+    MoreDetailsDataBase {
 
     private val projection = arrayOf(
         ID_COLUMN,
@@ -31,24 +31,24 @@ internal class OtherInfoDataBaseImpl(
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    override fun saveArtist(artistName: String?, artistInfo: WikipediaArtistInfo) {
-            val values = createContentValues(artistName,artistInfo)
+    override fun saveArtist(artistName: String?, wikipedia: WikipediaCard) {
+            val values = createContentValues(artistName,wikipedia)
             writableDatabase?.insert(ARTISTS_TABLE, null, values)
     }
 
-    private fun createContentValues(artistName: String?, artistInfo: WikipediaArtistInfo) :ContentValues{
+    private fun createContentValues(artistName: String?, artistInfo: WikipediaCard) :ContentValues{
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artistName)
-            put(INFO_COLUMN, artistInfo.info)
+            put(INFO_COLUMN, artistInfo.description)
             put(SOURCE_COLUMN, 1)
-            put(ARTIST_PAGE_ID_COLUMN, artistInfo.pageId)
+            put(ARTIST_PAGE_ID_COLUMN, artistInfo.infoURL)
         }
         return values
     }
 
-    override fun getArtistInfoByName(artistName: String): WikipediaArtistInfo? {
-            val cursor = createCursor(artistName)
-            return cursorToWikipediaArtistInfo.map(cursor)
+    override fun getCardByName(cardName: String): WikipediaCard? {
+            val cursor = createCursor(cardName)
+            return cursorToWikipediaCard.map(cursor)
         }
 
     private fun createCursor(artist: String): Cursor {

@@ -1,6 +1,6 @@
 package ayds.winchester.songinfo.moredetails.model
 
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -17,13 +17,13 @@ class MoreDetailsModelTest {
 
     @Test
     fun `on search artist info it should notify the result`() {
-        val artistInfo: ArtistInfo = mockk()
-        every { repository.getArtistInfoByName("artistName") } returns artistInfo
-        val artistInfoTester: (ArtistInfo) -> Unit = mockk(relaxed = true)
-        moreDetailsModel.artistInfoObservable.subscribe {
+        val artistInfo: Card = mockk()
+        every { repository.getCardByName("artistName") } returns artistInfo
+        val artistInfoTester: (Card) -> Unit = mockk(relaxed = true)
+        moreDetailsModel.cardObservable.subscribe {
             artistInfoTester(it)
         }
-        moreDetailsModel.searchArtistInfo("artistName")
+        moreDetailsModel.searchCard("artistName")
         verify { artistInfoTester(artistInfo) }
     }
 }

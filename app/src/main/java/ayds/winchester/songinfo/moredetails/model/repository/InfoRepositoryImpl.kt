@@ -1,39 +1,39 @@
 package ayds.winchester.songinfo.moredetails.model.repository
 
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaArtistInfoService
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.OtherInfoDataBase
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
+import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaCardService
+import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
 interface InfoRepository {
-    fun getArtistInfoByName(artistName: String): ArtistInfo
+    fun getCardByName(cardName: String): Card
 }
 
 internal class InfoRepositoryImpl(
-    private val wikipediaLocalStorage: OtherInfoDataBase,
-    private val wikipediaArtistInfoService: WikipediaArtistInfoService
+    private val wikipediaLocalStorage: MoreDetailsDataBase,
+    private val wikipediaCardService: WikipediaCardService
 ) : InfoRepository {
 
-    override fun getArtistInfoByName(artistName: String) : ArtistInfo {
-        var artistInfo = wikipediaLocalStorage.getArtistInfoByName(artistName)
+    override fun getCardByName(cardName: String): Card {
+        var card = wikipediaLocalStorage.getCardByName(cardName)
         when {
-            artistInfo != null -> markArtistInfoAsLocal(artistInfo)
+            card != null -> markCardAsLocal(card)
             else -> {
                 try {
-                    artistInfo = wikipediaArtistInfoService.getArtistInfo(artistName)
-                    artistInfo?.let {
-                        wikipediaLocalStorage.saveArtist(artistName, it)
+                    card = wikipediaCardService.getCard(cardName)
+                    card?.let {
+                        wikipediaLocalStorage.saveArtist(cardName, it)
                     }
                 } catch (e: Exception) {
-                    artistInfo = null
+                    card = null
                 }
             }
         }
-        return artistInfo ?: EmptyArtistInfo
+        return card ?: EmptyCard
     }
 
-    private fun markArtistInfoAsLocal(artistInfo: WikipediaArtistInfo) {
-        artistInfo.isLocallyStored = true
+    private fun markCardAsLocal(card: WikipediaCard) {
+        card.isLocallyStored = true
     }
 }
