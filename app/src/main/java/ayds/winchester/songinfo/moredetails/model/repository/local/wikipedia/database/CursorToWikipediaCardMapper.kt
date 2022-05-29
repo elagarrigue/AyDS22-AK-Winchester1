@@ -17,7 +17,7 @@ internal class CursorToWikipediaCardMapperImpl : CursorToWikipediaCardMapper {
                     WikipediaCard(
                         description = getString(getColumnIndexOrThrow(INFO_COLUMN)),
                         infoURL = getString(getColumnIndexOrThrow(ARTIST_PAGE_ID_COLUMN)),
-                        source = "",
+                        source = getString(getColumnIndexOrThrow(SOURCE_COLUMN)),
                         sourceLogoURL = ""
                     )
                 } else {

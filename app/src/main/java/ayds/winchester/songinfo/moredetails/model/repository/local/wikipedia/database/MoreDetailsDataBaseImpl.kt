@@ -40,7 +40,7 @@ internal class MoreDetailsDataBaseImpl(
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artistName)
             put(INFO_COLUMN, artistInfo.description)
-            put(SOURCE_COLUMN, 1)
+            put(SOURCE_COLUMN, artistInfo.source)
             put(ARTIST_PAGE_ID_COLUMN, artistInfo.infoURL)
         }
         return values

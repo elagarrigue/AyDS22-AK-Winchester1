@@ -36,6 +36,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
+    private lateinit var sourceInfoTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         artistInfoTextView = findViewById(R.id.textPane2)
         viewFullArticleButton = findViewById(R.id.openUrlButton)
         logoImageView = findViewById(R.id.imageView)
+        sourceInfoTextView = findViewById(R.id.sourceInfoTextView)
     }
 
     private fun initListeners() {
@@ -82,6 +84,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         updateUiState(artist)
         updateArtistInfo()
         updateMoreDetailsState()
+        updateSourceInfo()
     }
 
     private fun updateUiState(artist: Card) {
@@ -94,7 +97,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateArtistUiState(artist: Card) {
         uiState = uiState.copy(
             pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.infoURL}",
-            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName) ,
+            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
+            sourceInfo = artist.source,
             actionsEnabled = true
         )
     }
@@ -134,6 +138,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun notifySearchArtistInfoAction() {
         onActionSubject.notify(MoreDetailsUiEvent.Search)
+    }
+
+    private fun updateSourceInfo() {
+        runOnUiThread {
+            sourceInfoTextView.text = Html.fromHtml(uiState.sourceInfo)
+        }
     }
 
     companion object {

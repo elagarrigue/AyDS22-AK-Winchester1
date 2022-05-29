@@ -8,6 +8,7 @@ private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
 private const val PAGE_ID = "pageid"
 private const val QUERY = "query"
+private const val SOURCE = "Wikipedia"
 
 interface WikipediaToArtistInfoResolver {
     fun getCardFromExternalData(serviceData: String?): WikipediaCard?
@@ -21,7 +22,7 @@ internal class JsonToArtistInfoResolver() : WikipediaToArtistInfoResolver {
                 WikipediaCard(
                     item.getInfo(),
                     item.getPageId(),
-                    "",
+                    SOURCE,
                     ""
                 )
             }
