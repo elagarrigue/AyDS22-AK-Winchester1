@@ -3,8 +3,8 @@ package ayds.winchester.songinfo.moredetails.model
 import android.content.Context
 import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
 import ayds.winchester.songinfo.moredetails.model.repository.InfoRepositoryImpl
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaCardService
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaInjector
+import ayds.winchester1.spotify.WikipediaCardService
+import ayds.winchester1.spotify.WikipediaInjector
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.database.CursorToWikipediaCardMapperImpl
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.database.MoreDetailsDataBaseImpl
@@ -19,7 +19,7 @@ object MoreDetailsModelInjector {
         val moreDetailsDataBase: MoreDetailsDataBase = MoreDetailsDataBaseImpl(
             moreDetailsView as Context, CursorToWikipediaCardMapperImpl()
         )
-        val wikipediaCardService: WikipediaCardService = WikipediaInjector.wikipediaCardService
+        val wikipediaCardService: ayds.winchester1.spotify.WikipediaCardService = ayds.winchester1.spotify.WikipediaInjector.wikipediaCardService
         val repository: InfoRepository =
             InfoRepositoryImpl(moreDetailsDataBase, wikipediaCardService)
         moreDetailsModel = MoreDetailsModelImpl(repository)

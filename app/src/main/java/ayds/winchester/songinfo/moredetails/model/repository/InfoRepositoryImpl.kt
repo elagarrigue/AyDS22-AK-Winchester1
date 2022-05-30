@@ -3,8 +3,9 @@ package ayds.winchester.songinfo.moredetails.model.repository
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaCardService
+import ayds.winchester1.spotify.WikipediaCardService
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
+import ayds.winchester1.spotify.WikipediaCard as ServiceWikipediaCard
 
 interface InfoRepository {
     fun getCardByName(cardName: String): Card
@@ -21,7 +22,19 @@ internal class InfoRepositoryImpl(
             card != null -> markCardAsLocal(card)
             else -> {
                 try {
-                    card = wikipediaCardService.getCard(cardName)
+                    val serviceWikipediaCard = wikipediaCardService.getCard(cardName)
+                    //TODO el mapeo no se hace aca hay que moverlo
+                    serviceWikipediaCard?.let {
+                        card = WikipediaCard(
+                            it.description,
+                            it.infoURL,
+                            it.source,
+                            it.sourceLogoURL,
+                            it.isLocallyStored
+                        )
+                    }
+
+
                     card?.let {
                         wikipediaLocalStorage.saveArtist(cardName, it)
                     }
