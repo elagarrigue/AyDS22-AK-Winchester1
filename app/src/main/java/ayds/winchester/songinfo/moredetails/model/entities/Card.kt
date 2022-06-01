@@ -5,7 +5,7 @@ open class Card (
     open val infoURL: String,
     open val source: String,
     open val sourceLogoURL: String,
-    open val isLocallyStored: Boolean = false
+    open var isLocallyStored: Boolean = false
 )
 
 object EmptyCard : Card(
