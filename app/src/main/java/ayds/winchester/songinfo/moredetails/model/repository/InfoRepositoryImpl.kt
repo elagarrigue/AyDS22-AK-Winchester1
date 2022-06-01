@@ -2,7 +2,6 @@ package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
 import ayds.winchester1.wikipedia.WikipediaCardService
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
@@ -16,27 +15,27 @@ internal class InfoRepositoryImpl(
 ) : InfoRepository {
 
     override fun getCardByName(cardName: String): Card {
-        var card = wikipediaLocalStorage.getCardByName(cardName)
+        var card: Card? = null
         when {
-            card != null -> markCardAsLocal(card)
+            //card != null -> markCardAsLocal(card)
             else -> {
                 try {
                     val serviceWikipediaCard = wikipediaCardService.getCard(cardName)
                     //TODO el mapeo no se hace aca hay que moverlo
                     serviceWikipediaCard?.let {
-                        card = WikipediaCard(
+                        card = Card(
                             it.description,
                             it.infoURL,
-                            it.source,
-                            it.sourceLogoURL,
-                            it.isLocallyStored
+                            "wikipedia",
+                            "https://es.wikipedia.org/wiki/Archivo:Wikipedia-logo-es.png",
+                            false
                         )
                     }
 
 
-                    card?.let {
+                   /* card?.let {
                         wikipediaLocalStorage.saveArtist(cardName, it)
-                    }
+                    } */
                 } catch (e: Exception) {
                     card = null
                 }
@@ -45,7 +44,7 @@ internal class InfoRepositoryImpl(
         return card ?: EmptyCard
     }
 
-    private fun markCardAsLocal(card: WikipediaCard) {
+    private fun markCardAsLocal(card: Card) {
         card.isLocallyStored = true
     }
 }

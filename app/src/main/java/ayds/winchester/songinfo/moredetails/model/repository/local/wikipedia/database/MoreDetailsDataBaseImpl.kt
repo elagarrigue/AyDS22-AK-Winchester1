@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
+import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
 private const val DATABASE_NAME = "dictionary.db"
@@ -31,12 +31,12 @@ internal class MoreDetailsDataBaseImpl(
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    override fun saveArtist(artistName: String?, wikipedia: WikipediaCard) {
+    override fun saveArtist(artistName: String?, wikipedia: Card) {
             val values = createContentValues(artistName,wikipedia)
             writableDatabase?.insert(ARTISTS_TABLE, null, values)
     }
 
-    private fun createContentValues(artistName: String?, artistInfo: WikipediaCard) :ContentValues{
+    private fun createContentValues(artistName: String?, artistInfo: Card) :ContentValues{
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artistName)
             put(INFO_COLUMN, artistInfo.description)
@@ -46,7 +46,7 @@ internal class MoreDetailsDataBaseImpl(
         return values
     }
 
-    override fun getCardByName(cardName: String): WikipediaCard? {
+    override fun getCardByName(cardName: String): Card? {
             val cursor = createCursor(cardName)
             return cursorToWikipediaCard.map(cursor)
         }

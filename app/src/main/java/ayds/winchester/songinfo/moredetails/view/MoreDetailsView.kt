@@ -13,7 +13,6 @@ import ayds.winchester.songinfo.moredetails.model.MoreDetailsModel
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 import ayds.winchester.songinfo.utils.view.ImageLoader
@@ -89,7 +88,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateUiState(artist: Card) {
         when (artist) {
-            is WikipediaCard -> updateArtistUiState(artist)
+            is Card -> updateArtistUiState(artist)
             EmptyCard -> updateNoResultsUiState()
         }
     }
