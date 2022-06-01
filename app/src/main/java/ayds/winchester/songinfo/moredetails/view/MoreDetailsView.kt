@@ -11,9 +11,9 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.R
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModel
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
+import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 import ayds.winchester.songinfo.utils.view.ImageLoader
@@ -36,6 +36,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
+    private lateinit var sourceInfoTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         artistInfoTextView = findViewById(R.id.textPane2)
         viewFullArticleButton = findViewById(R.id.openUrlButton)
         logoImageView = findViewById(R.id.imageView)
+        sourceInfoTextView = findViewById(R.id.sourceInfoTextView)
     }
 
     private fun initListeners() {
@@ -73,28 +75,30 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initObservers() {
-        moreDetailsModel.artistInfoObservable
+        moreDetailsModel.cardObservable
             .subscribe { value -> updateArtistInfo(value) }
 
     }
 
-    private fun updateArtistInfo(artist: ArtistInfo) {
+    private fun updateArtistInfo(artist: Card) {
         updateUiState(artist)
         updateArtistInfo()
         updateMoreDetailsState()
+        updateSourceInfo()
     }
 
-    private fun updateUiState(artist: ArtistInfo) {
+    private fun updateUiState(artist: Card) {
         when (artist) {
-            is WikipediaArtistInfo -> updateArtistUiState(artist)
-            EmptyArtistInfo -> updateNoResultsUiState()
+            is WikipediaCard -> updateArtistUiState(artist)
+            EmptyCard -> updateNoResultsUiState()
         }
     }
 
-    private fun updateArtistUiState(artist: ArtistInfo) {
+    private fun updateArtistUiState(artist: Card) {
         uiState = uiState.copy(
-            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.pageId}",
-            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName) ,
+            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.infoURL}",
+            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
+            sourceInfo = artist.source,
             actionsEnabled = true
         )
     }
@@ -134,6 +138,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun notifySearchArtistInfoAction() {
         onActionSubject.notify(MoreDetailsUiEvent.Search)
+    }
+
+    private fun updateSourceInfo() {
+        runOnUiThread {
+            sourceInfoTextView.text = Html.fromHtml(uiState.sourceInfo)
+        }
     }
 
     companion object {

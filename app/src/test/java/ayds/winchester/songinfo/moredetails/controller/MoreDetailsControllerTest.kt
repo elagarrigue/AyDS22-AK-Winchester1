@@ -33,7 +33,7 @@ class MoreDetailsControllerTest {
     fun `on search event should search artist`() {
         every { moreDetailsView.uiState } returns MoreDetailsUiState(artistName = "artist")
         onActionSubject.notify(MoreDetailsUiEvent.Search)
-        verify { moreDetailsModel.searchArtistInfo("artist") }
+        verify { moreDetailsModel.searchCard("artist") }
     }
 
     @Test

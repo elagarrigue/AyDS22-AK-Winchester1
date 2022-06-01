@@ -7,4 +7,5 @@ data class MoreDetailsUiState(
     val actionsEnabled: Boolean = false,
     val IMAGE_URL: String = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png",
     val FULL_ARTICLE_URL: String = "https://en.wikipedia.org/?curid=",
+    val sourceInfo: String = ""
 )
