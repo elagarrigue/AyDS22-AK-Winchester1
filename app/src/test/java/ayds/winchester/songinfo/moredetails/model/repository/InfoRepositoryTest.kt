@@ -2,7 +2,6 @@ package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
-import ayds.winchester1.spotify.WikipediaCardService
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 import io.mockk.every
 import io.mockk.mockk
@@ -14,7 +13,7 @@ import java.lang.Exception
 class InfoRepositoryTest {
 
     private val wikipediaLocalStorage: MoreDetailsDataBase = mockk(relaxUnitFun = true)
-    private val wikipediaCardService: ayds.winchester1.spotify.WikipediaCardService = mockk(relaxUnitFun = true)
+    private val wikipediaCardService: ayds.winchester1.wikipedia.WikipediaCardService = mockk(relaxUnitFun = true)
 
     private val infoRepository: InfoRepository by lazy {
         InfoRepositoryImpl(wikipediaLocalStorage, wikipediaCardService)

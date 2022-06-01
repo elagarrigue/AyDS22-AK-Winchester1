@@ -3,9 +3,8 @@ package ayds.winchester.songinfo.moredetails.model.repository
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
-import ayds.winchester1.spotify.WikipediaCardService
+import ayds.winchester1.wikipedia.WikipediaCardService
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
-import ayds.winchester1.spotify.WikipediaCard as ServiceWikipediaCard
 
 interface InfoRepository {
     fun getCardByName(cardName: String): Card
