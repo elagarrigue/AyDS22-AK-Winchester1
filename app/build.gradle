@@ -35,7 +35,7 @@ android {
 dependencies {
 
     implementation project(":observer")
-    implementation project(":SpotifyData")
+    implementation project(":WikipediaData")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'

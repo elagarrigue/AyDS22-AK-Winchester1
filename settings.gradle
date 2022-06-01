@@ -1,5 +1,5 @@
 include ':app'
 include 'observer'
-include ':SpotifyData'
-project(':SpotifyData').projectDir = new File('libs/SpotifyData')
+include ':WikipediaData'
+project(':WikipediaData').projectDir = new File('libs/WikipediaData')
 rootProject.name = "AK Winchester"
