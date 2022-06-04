@@ -21,19 +21,8 @@ internal class InfoRepositoryImpl(
             card != null -> markCardAsLocal(card)
             else -> {
                 try {
-                    val serviceWikipediaCard = broker.getCards(cardName).first()
-                    //TODO el mapeo no se hace aca hay que moverlo
-                    serviceWikipediaCard?.let {
-                        card = Card(
-                            it.description,
-                            it.infoURL,
-                            "wikipedia",
-                            "https://es.wikipedia.org/wiki/Archivo:Wikipedia-logo-es.png",
-                            false
-                        )
-                    }
-
-                   card?.let {
+                    card = broker.getCards(cardName).first()
+                    card.let {
                         wikipediaLocalStorage.saveArtist(cardName, it)
                     }
                 } catch (e: Exception) {
