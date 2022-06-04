@@ -17,7 +17,7 @@ internal class InfoRepositoryImpl(
     override fun getCardByName(cardName: String): Card {
         var card: Card? = null
         when {
-            //card != null -> markCardAsLocal(card)
+            card != null -> markCardAsLocal(card)
             else -> {
                 try {
                     val serviceWikipediaCard = wikipediaCardService.getCard(cardName)
@@ -32,10 +32,9 @@ internal class InfoRepositoryImpl(
                         )
                     }
 
-
-                   /* card?.let {
+                   card?.let {
                         wikipediaLocalStorage.saveArtist(cardName, it)
-                    } */
+                    }
                 } catch (e: Exception) {
                     card = null
                 }
