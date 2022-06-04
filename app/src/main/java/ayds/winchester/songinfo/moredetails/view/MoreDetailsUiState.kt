@@ -6,6 +6,6 @@ data class MoreDetailsUiState(
     val pageUrl: String = "",
     val actionsEnabled: Boolean = false,
     val IMAGE_URL: String = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png",
-    val FULL_ARTICLE_URL: String = "https://en.wikipedia.org/?curid=",
+    val FULL_ARTICLE_URL: String = "https://en.wikipedia.org/?curid=", //TODO cambiar segun el source
     val sourceInfo: String = ""
 )

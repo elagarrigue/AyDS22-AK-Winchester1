@@ -84,6 +84,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         updateArtistInfo()
         updateMoreDetailsState()
         updateSourceInfo()
+        updateSourceLogo()
     }
 
     private fun updateUiState(artist: Card) {
@@ -98,6 +99,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.infoURL}",
             info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
             sourceInfo = artist.source,
+            IMAGE_URL = artist.sourceLogoURL,
             actionsEnabled = true
         )
     }
@@ -143,6 +145,10 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         runOnUiThread {
             sourceInfoTextView.text = Html.fromHtml(uiState.sourceInfo)
         }
+    }
+
+    private fun updateSourceLogo() {
+        initLogoImage()
     }
 
     companion object {
