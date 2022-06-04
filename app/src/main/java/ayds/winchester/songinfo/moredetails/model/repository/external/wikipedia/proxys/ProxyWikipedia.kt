@@ -22,6 +22,6 @@ internal class ProxyWikipedia () : Proxy {
             )
         }
 
-        return card ?: EmptyCard;
+        return card ?: EmptyCard
     }
 }
