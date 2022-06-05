@@ -44,7 +44,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         initProperties()
         initListeners()
         initObservers()
-        initLogoImage()
         initArtistName()
         notifySearchArtistInfoAction()
     }
@@ -96,7 +95,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistUiState(artist: Card) {
         uiState = uiState.copy(
-            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.infoURL}",
+            pageUrl = "${artist.infoURL}",
             info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
             sourceInfo = artist.source,
             IMAGE_URL = artist.sourceLogoURL,
@@ -128,7 +127,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initLogoImage() {
         runOnUiThread {
-            imageLoader.loadImageIntoView(uiState.IMAGE_URL, logoImageView)
+                imageLoader.loadImageIntoView(uiState.IMAGE_URL, logoImageView)
         }
     }
 
