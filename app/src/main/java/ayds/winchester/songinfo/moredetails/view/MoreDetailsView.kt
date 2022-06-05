@@ -36,6 +36,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
     private lateinit var sourceInfoTextView: TextView
+    private lateinit var nextCardButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,14 +63,20 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         viewFullArticleButton = findViewById(R.id.openUrlButton)
         logoImageView = findViewById(R.id.imageView)
         sourceInfoTextView = findViewById(R.id.sourceInfoTextView)
+        nextCardButton = findViewById(R.id.nextCardButton)
     }
 
     private fun initListeners() {
         viewFullArticleButton.setOnClickListener { notifyOpenFullArticleAction() }
+        nextCardButton.setOnClickListener{ notifyNavigateToNextCardAction() }
     }
 
     private fun notifyOpenFullArticleAction() {
         onActionSubject.notify(MoreDetailsUiEvent.ViewFullArticle)
+    }
+
+    private fun notifyNavigateToNextCardAction() {
+        onActionSubject.notify(MoreDetailsUiEvent.NavigateToNextCard)
     }
 
     private fun initObservers() {
