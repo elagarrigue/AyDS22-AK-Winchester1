@@ -6,6 +6,6 @@ data class MoreDetailsUiState(
     val pageUrl: String = "",
     val actionsEnabled: Boolean = false,
     val IMAGE_URL: String = "",
-    val FULL_ARTICLE_URL: String = "", //TODO cambiar segun el source
+    val FULL_ARTICLE_URL: String = "",
     val sourceInfo: String = ""
 )

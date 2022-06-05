@@ -15,7 +15,7 @@ internal class ProxyNewYorkTimes () : Proxy{
             card = Card(
                 it.artistInfo,
                 it.artistUrl,
-                "newyorktimes",
+                CardSource.NEW_YORK_TIMES,
                 it.source_logo_url,
                 false
             )

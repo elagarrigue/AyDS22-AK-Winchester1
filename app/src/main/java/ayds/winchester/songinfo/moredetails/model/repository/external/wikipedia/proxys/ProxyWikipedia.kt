@@ -16,7 +16,7 @@ internal class ProxyWikipedia () : Proxy {
             card = Card(
                 it.description,
                 it.infoURL,
-                "wikipedia",
+                CardSource.WIKIPEDIA,
                 "https://es.wikipedia.org/wiki/Archivo:Wikipedia-logo-es.png",
                 false
             )

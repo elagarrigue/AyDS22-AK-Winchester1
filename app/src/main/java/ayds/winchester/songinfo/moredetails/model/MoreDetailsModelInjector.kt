@@ -24,9 +24,9 @@ object MoreDetailsModelInjector {
             moreDetailsView as Context, CursorToWikipediaCardMapperImpl()
         )
         val proxies: List<Proxy> = listOf(
+            ProxyWikipedia(),
             ProxyLastFM(),
-            ProxyNewYorkTimes(),
-            ProxyWikipedia()
+            ProxyNewYorkTimes()
         )
         val broker: Broker = BrokerImpl(proxies)
         val repository: InfoRepository =

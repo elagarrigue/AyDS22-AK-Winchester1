@@ -25,6 +25,7 @@ internal class MoreDetailsControllerImpl(
             when (value) {
                 MoreDetailsUiEvent.ViewFullArticle -> viewFullArticle()
                 MoreDetailsUiEvent.Search -> searchArtist()
+                MoreDetailsUiEvent.NavigateToNextCard -> searchArtist()
             }
         }
 

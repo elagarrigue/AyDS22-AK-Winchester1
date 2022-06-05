@@ -3,7 +3,6 @@ package ayds.winchester.songinfo.moredetails.model.repository
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.Broker
-import ayds.winchester1.wikipedia.WikipediaCardService
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
 interface InfoRepository {
@@ -21,7 +20,7 @@ internal class InfoRepositoryImpl(
             card != null -> markCardAsLocal(card)
             else -> {
                 try {
-                    card = broker.getCards(cardName).first()
+                    card = broker.getCard(cardName)
                     card.let {
                         wikipediaLocalStorage.saveArtist(cardName, it)
                     }

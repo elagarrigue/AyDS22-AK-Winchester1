@@ -15,7 +15,7 @@ internal class ProxyLastFM () : Proxy {
             card = Card(
                 it.biography,
                 it.articleUrl,
-                "Last Fm",
+                CardSource.LAST_FM,
                 it.logoUrl,
                 false
             )
