@@ -6,6 +6,7 @@ import ayds.winchester.songinfo.moredetails.model.repository.InfoRepositoryImpl
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.Broker
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.BrokerImpl
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys.Proxy
+import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys.ProxyLastFM
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys.ProxyNewYorkTimes
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys.ProxyWikipedia
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
@@ -23,6 +24,7 @@ object MoreDetailsModelInjector {
             moreDetailsView as Context, CursorToWikipediaCardMapperImpl()
         )
         val proxies: List<Proxy> = listOf(
+            ProxyLastFM(),
             ProxyNewYorkTimes(),
             ProxyWikipedia()
         )
