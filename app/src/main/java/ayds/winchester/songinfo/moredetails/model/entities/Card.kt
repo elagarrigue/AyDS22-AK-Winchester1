@@ -1,5 +1,7 @@
 package ayds.winchester.songinfo.moredetails.model.entities
 
+import ayds.winchester.songinfo.home.view.HomeUiState.Companion.DEFAULT_IMAGE
+
 open class Card (
     open val description: String,
     open val infoURL: String,
@@ -12,6 +14,6 @@ object EmptyCard : Card(
     description = "not found",
     infoURL= "",
     source = "",
-    sourceLogoURL = "",
+    sourceLogoURL = DEFAULT_IMAGE,
     isLocallyStored = false
 )
