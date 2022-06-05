@@ -17,7 +17,7 @@ internal class ProxyWikipedia () : Proxy {
                 it.description,
                 it.infoURL,
                 "wikipedia",
-                "https://es.wikipedia.org/wiki/Archivo:Wikipedia-logo-es.png",
+                it.sourceLogoURL,
                 false
             )
         }
