@@ -95,14 +95,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateUiState(artist: Card) {
         when (artist) {
-            is Card -> updateArtistUiState(artist)
             EmptyCard -> updateNoResultsUiState()
+            else -> updateArtistUiState(artist)
         }
     }
 
     private fun updateArtistUiState(artist: Card) {
         uiState = uiState.copy(
-            pageUrl = "${artist.infoURL}",
+            pageUrl = artist.infoURL,
             info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
             sourceInfo = artist.source,
             IMAGE_URL = artist.sourceLogoURL,
@@ -110,8 +110,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         )
     }
 
-    private fun updateNoResultsUiState() {
+    private fun updateNoResultsUiState(artist: Card) {
         uiState = uiState.copy(
+            pageUrl = artist.infoURL,
+            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
+            sourceInfo = artist.source,
+            IMAGE_URL = artist.sourceLogoURL,
             actionsEnabled = false
         )
     }
