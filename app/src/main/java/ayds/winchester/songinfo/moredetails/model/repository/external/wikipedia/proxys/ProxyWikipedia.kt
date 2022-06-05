@@ -5,6 +5,8 @@ import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester1.wikipedia.WikipediaCardService
 import ayds.winchester1.wikipedia.WikipediaInjector
 
+private const val SOURCE = "Wikipedia"
+
 internal class ProxyWikipedia () : Proxy {
     private val wikipediaCardService: WikipediaCardService = WikipediaInjector.wikipediaCardService
 
@@ -16,12 +18,16 @@ internal class ProxyWikipedia () : Proxy {
             card = Card(
                 it.description,
                 it.infoURL,
-                CardSource.WIKIPEDIA,
+                getSource(),
                 it.sourceLogoURL,
                 false
             )
         }
 
         return card ?: EmptyCard
+    }
+
+    override fun getSource(): String {
+        return SOURCE
     }
 }

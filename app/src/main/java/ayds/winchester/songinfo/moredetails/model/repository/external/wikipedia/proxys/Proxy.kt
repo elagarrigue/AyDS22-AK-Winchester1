@@ -4,8 +4,5 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 
 interface Proxy {
     fun getCard(artist: String?): Card
-}
-
-enum class CardSource {
-    LAST_FM, NEW_YORK_TIMES, WIKIPEDIA, EMPTY
+    fun getSource() : String
 }
