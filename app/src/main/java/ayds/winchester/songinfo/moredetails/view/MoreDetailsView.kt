@@ -95,7 +95,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateUiState(artist: Card) {
         when (artist) {
-            EmptyCard -> updateNoResultsUiState()
+            EmptyCard -> updateNoResultsUiState(artist)
             else -> updateArtistUiState(artist)
         }
     }
