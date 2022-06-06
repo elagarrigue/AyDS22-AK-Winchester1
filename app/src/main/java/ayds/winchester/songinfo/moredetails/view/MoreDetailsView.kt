@@ -22,6 +22,7 @@ interface MoreDetailsView {
     val uiState: MoreDetailsUiState
 
     fun openFullArticle()
+    fun updateUiComponents()
 }
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
@@ -50,7 +51,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     override fun openFullArticle() {
-        navigationUtils.openExternalUrl(this, uiState.pageUrl)
+        navigationUtils.openExternalUrl(this, uiState.getCard().pageUrl)
     }
 
     private fun initModule() {
@@ -68,7 +69,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initListeners() {
         viewFullArticleButton.setOnClickListener { notifyOpenFullArticleAction() }
-        nextCardButton.setOnClickListener{ notifyNavigateToNextCardAction() }
+        nextCardButton.setOnClickListener { notifyNavigateToNextCardAction() }
     }
 
     private fun notifyOpenFullArticleAction() {
@@ -81,53 +82,45 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initObservers() {
         moreDetailsModel.cardsObservable
-            .subscribe { value -> updateArtistInfo(value.first()) }
+            .subscribe { value -> updateArtistInfo(value) }
 
     }
 
-    private fun updateArtistInfo(artist: Card) {
-        updateUiState(artist)
+    private fun updateArtistInfo(cards: List<Card>) {
+        updateUiState(cards)
+        updateUiComponents()
+    }
+
+    override fun updateUiComponents(){
         updateArtistInfo()
         updateMoreDetailsState()
         updateSourceInfo()
         updateSourceLogo()
     }
 
-    private fun updateUiState(artist: Card) {
-        when (artist) {
-            EmptyCard -> updateNoResultsUiState(artist)
-            else -> updateArtistUiState(artist)
-        }
-    }
-
-    private fun updateArtistUiState(artist: Card) {
+    private fun updateUiState(cards: List<Card>) {
         uiState = uiState.copy(
-            pageUrl = artist.infoURL,
-            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
-            sourceInfo = artist.source,
-            IMAGE_URL = artist.sourceLogoURL,
-            actionsEnabled = true
-        )
-    }
-
-    private fun updateNoResultsUiState(artist: Card) {
-        uiState = uiState.copy(
-            pageUrl = artist.infoURL,
-            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName),
-            sourceInfo = artist.source,
-            IMAGE_URL = artist.sourceLogoURL,
-            actionsEnabled = false
+            cards = cards.map {
+                CardUiState(
+                    pageUrl = it.infoURL,
+                    info = artistInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
+                    sourceInfo = it.source,
+                    IMAGE_URL = it.sourceLogoURL,
+                    actionsEnabled = it != EmptyCard,
+                )
+            },
+            indexCard = 0
         )
     }
 
     private fun updateArtistInfo() {
         runOnUiThread {
-            artistInfoTextView.text = Html.fromHtml(uiState.info)
+            artistInfoTextView.text = Html.fromHtml(uiState.getCard().info)
         }
     }
 
     private fun updateMoreDetailsState() {
-        enableActions(uiState.actionsEnabled)
+        enableActions(uiState.getCard().actionsEnabled)
     }
 
     private fun enableActions(enable: Boolean) {
@@ -138,7 +131,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initLogoImage() {
         runOnUiThread {
-                imageLoader.loadImageIntoView(uiState.IMAGE_URL, logoImageView)
+            imageLoader.loadImageIntoView(uiState.getCard().IMAGE_URL, logoImageView)
         }
     }
 
@@ -153,7 +146,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateSourceInfo() {
         runOnUiThread {
-            sourceInfoTextView.text = Html.fromHtml(artistInfoHelper.getStringFromCardSource(uiState.sourceInfo))
+            sourceInfoTextView.text =
+                Html.fromHtml(artistInfoHelper.getStringFromCardSource(uiState.getCard().sourceInfo))
         }
     }
 
