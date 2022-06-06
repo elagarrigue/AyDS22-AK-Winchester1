@@ -99,6 +99,11 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateUiState(cards: List<Card>) {
+        if (cards.isEmpty()) updateNoResultsUiState()
+        else updateResultsUiState(cards)
+    }
+
+    private fun updateResultsUiState(cards: List<Card>){
         uiState = uiState.copy(
             cards = cards.map {
                 CardUiState(
@@ -106,9 +111,24 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
                     info = artistInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
                     sourceInfo = it.source,
                     IMAGE_URL = it.sourceLogoURL,
-                    actionsEnabled = it != EmptyCard,
+                    actionsEnabled = true,
                 )
             },
+            indexCard = 0
+        )
+    }
+
+    private fun updateNoResultsUiState() {
+        uiState = uiState.copy(
+            cards = listOf(EmptyCard.let{
+                CardUiState(
+                    pageUrl = it.infoURL,
+                    info = artistInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
+                    sourceInfo = it.source,
+                    IMAGE_URL = it.sourceLogoURL,
+                    actionsEnabled = false,
+                )
+            }),
             indexCard = 0
         )
     }
@@ -126,6 +146,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun enableActions(enable: Boolean) {
         runOnUiThread {
             viewFullArticleButton.isEnabled = enable
+            nextCardButton.isEnabled = enable
         }
     }
 
