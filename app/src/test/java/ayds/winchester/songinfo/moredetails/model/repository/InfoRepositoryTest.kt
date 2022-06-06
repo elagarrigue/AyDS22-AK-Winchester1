@@ -14,55 +14,57 @@ import java.lang.Exception
 
 class InfoRepositoryTest {
 
-    private val wikipediaLocalStorage: MoreDetailsDataBase = mockk(relaxUnitFun = true)
-    private val wikipediaCardService: ayds.winchester1.wikipedia.WikipediaCardService = mockk(relaxUnitFun = true)
-    private val broker: BrokerImpl = mockk()
+    private val cardLocalStorage: MoreDetailsDataBase = mockk(relaxUnitFun = true)
+    private val broker: BrokerImpl = mockk(relaxed = true)
 
     private val infoRepository: InfoRepository by lazy {
-        InfoRepositoryImpl(wikipediaLocalStorage, broker)
+        InfoRepositoryImpl(cardLocalStorage, broker)
     }
 
     @Test
-    fun `given existing artis info by artistName should return artist info and mark it as local`() {
-        val artistInfo = Card("description", "infoURL",CardSource.WIKIPEDIA,"", false)
-        every { wikipediaLocalStorage.getCardByName("artistName") } returns artistInfo
+    fun `given existing artist info by artistName should return artist info and mark it as local`() {
+        val artistInfo: List<Card> = mockk(relaxed = true)
+        every { cardLocalStorage.getCardsByName("artistName") } returns artistInfo
 
-        val result = infoRepository.getCardByName("artistName").first()
+        val result = infoRepository.getCardsByName("artistName")
 
         Assert.assertEquals(artistInfo, result)
-        Assert.assertTrue(artistInfo.isLocallyStored)
+        artistInfo.forEach{Assert.assertTrue(it.isLocallyStored)}
     }
 
     @Test
     fun `given non existing artist info by artistName should get the artist info and store it`() {
-        val artistInfo = Card("description", "infoURL",CardSource.WIKIPEDIA,"", false)
-        every { wikipediaLocalStorage.getCardByName("artistName") } returns null
-        every { wikipediaCardService.getCard("artistName") } returns artistInfo
+        val artistInfo: List<Card> = listOf(EmptyCard)
+        every { cardLocalStorage.getCardsByName("artistName") } returns null
+        every { broker.getCards("artistName") } returns artistInfo
 
-        val result = infoRepository.getCardByName("artistName")
+        val result = infoRepository.getCardsByName("artistName")
 
         Assert.assertEquals(artistInfo, result)
-        Assert.assertFalse(artistInfo.isLocallyStored)
-        verify { wikipediaLocalStorage.saveArtist("artistName", artistInfo) }
+        artistInfo.forEach{
+            Assert.assertFalse(it.isLocallyStored)
+            verify { cardLocalStorage.saveArtist("artistName", it) }
+        }
+
     }
 
     @Test
-    fun `given non existing artist info by artistName should return empty artist info`() {
-        every { wikipediaLocalStorage.getCardByName("artistName") } returns null
-        every { wikipediaCardService.getCard("artistName") } returns null
+    fun `given non existing artist info by artistName should return empty collection of cards`() {
+        every { cardLocalStorage.getCardsByName("artistName") } returns null
+        every { broker.getCards("artistName") } returns listOf(EmptyCard)
 
-        val result = infoRepository.getCardByName("artistName").first()
+        val result = infoRepository.getCardsByName("artistName")
 
-        Assert.assertEquals(EmptyCard, result)
+        Assert.assertEquals(listOf(EmptyCard), result)
     }
 
     @Test
-    fun `given service exception should return empty artist info`() {
-        every { wikipediaLocalStorage.getCardByName("artistName") } returns null
-        every { wikipediaCardService.getCard("artistName") } throws mockk<Exception>()
+    fun `given service exception should return empty collection of cards`() {
+        every { cardLocalStorage.getCardsByName("artistName") } returns null
+        every { broker.getCards("artistName") } throws mockk<Exception>()
 
-        val result = infoRepository.getCardByName("artistName").first()
+        val result = infoRepository.getCardsByName("artistName")
 
-        Assert.assertEquals(EmptyCard, result)
+        Assert.assertEquals(emptyList<Card>(), result)
     }
 }

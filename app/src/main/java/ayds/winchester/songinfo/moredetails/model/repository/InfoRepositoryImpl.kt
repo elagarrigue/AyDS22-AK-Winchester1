@@ -6,7 +6,7 @@ import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
 interface InfoRepository {
-    fun getCardByName(cardName: String): List<Card>
+    fun getCardsByName(cardName: String): List<Card>
 }
 
 internal class InfoRepositoryImpl(
@@ -14,9 +14,9 @@ internal class InfoRepositoryImpl(
     private val broker: Broker
 ) : InfoRepository {
 
-    override fun getCardByName(cardName: String): List<Card> {
+    override fun getCardsByName(cardName: String): List<Card> {
 
-        var cards: List<Card>? = null
+        var cards: List<Card>? = wikipediaLocalStorage.getCardsByName(cardName)
         when {
             cards != null -> cards.forEach {
                 markCardAsLocal(it)

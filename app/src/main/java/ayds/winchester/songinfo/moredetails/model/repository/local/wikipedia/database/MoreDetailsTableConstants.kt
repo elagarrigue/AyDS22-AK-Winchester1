@@ -5,6 +5,7 @@ const val ID_COLUMN = "id"
 const val ARTIST_COLUMN = "artist"
 const val INFO_COLUMN = "info"
 const val SOURCE_COLUMN = "source"
+const val SOURCE_LOGO_URL_COLUMN = "sourcelogourl"
 const val ARTIST_PAGE_ID_COLUMN = "pageid"
 
 const val createArtistTableQuery: String =
@@ -13,4 +14,5 @@ const val createArtistTableQuery: String =
             "$ARTIST_COLUMN string, " +
             "$INFO_COLUMN string, " +
             "$SOURCE_COLUMN integer, " +
+            "$SOURCE_LOGO_URL_COLUMN string, " +
             "$ARTIST_PAGE_ID_COLUMN string )"

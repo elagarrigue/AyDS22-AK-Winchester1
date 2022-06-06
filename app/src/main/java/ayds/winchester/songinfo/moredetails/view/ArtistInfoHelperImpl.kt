@@ -2,6 +2,7 @@ package ayds.winchester.songinfo.moredetails.view
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardSource
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 
 const val OPEN_HTML_TAG = "<html><div width=400><font face=\"arial\">"
 const val CLOSE_HTML_TAG = "</font></div></html>"
@@ -42,12 +43,14 @@ internal class ArtistInfoHelperImpl : ArtistInfoHelper {
 
     override fun artistInfoTextToHtml(artistInfo: Card, artistName: String): String {
         return when (artistInfo) {
-            is Card -> {
+            is EmptyCard -> {
+                NOT_FOUND
+            }
+            else -> {
                 val info = (if (artistInfo.isLocallyStored) STORED else SPACE) + artistInfo.description
                 val textWithBold = addBoldToInfo(info, artistName)
                 return buildHtml(textWithBold)
             }
-            else -> NOT_FOUND
         }
     }
 

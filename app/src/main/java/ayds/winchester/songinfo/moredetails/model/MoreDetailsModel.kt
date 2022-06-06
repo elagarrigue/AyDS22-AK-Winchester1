@@ -16,7 +16,7 @@ internal class MoreDetailsModelImpl(private val repository: InfoRepository) : Mo
     override val cardsObservable = Subject<List<Card>>()
 
     override fun searchCard(cardName: String) {
-        repository.getCardByName(cardName).let{
+        repository.getCardsByName(cardName).let{
             cardsObservable.notify(it)
         }
     }

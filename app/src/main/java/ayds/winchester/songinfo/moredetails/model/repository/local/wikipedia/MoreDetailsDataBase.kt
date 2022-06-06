@@ -4,5 +4,5 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 
 interface MoreDetailsDataBase {
     fun saveArtist(artist: String?, wikipedia: Card)
-    fun getCardByName(cardName: String): Card?
+    fun getCardsByName(cardName: String): List<Card>?
 }

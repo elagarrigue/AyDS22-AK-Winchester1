@@ -2,6 +2,7 @@ package ayds.winchester.songinfo.moredetails.view
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardSource
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
@@ -59,7 +60,7 @@ class ArtistInfoHelperTest {
 
     @Test
     fun `given a non spotify song it should return the song not found description`() {
-        val artistInfo: Card = mockk()
+        val artistInfo: EmptyCard = mockk()
         val artistName = "Test"
 
         val result = artistInfoHelper.artistInfoTextToHtml(artistInfo, artistName)

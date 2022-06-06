@@ -22,6 +22,7 @@ internal class MoreDetailsDataBaseImpl(
         ARTIST_COLUMN,
         INFO_COLUMN,
         SOURCE_COLUMN,
+        SOURCE_LOGO_URL_COLUMN,
         ARTIST_PAGE_ID_COLUMN
     )
 
@@ -41,12 +42,13 @@ internal class MoreDetailsDataBaseImpl(
             put(ARTIST_COLUMN, artistName)
             put(INFO_COLUMN, artistInfo.description)
             put(SOURCE_COLUMN, artistInfo.source.ordinal)
+            put(SOURCE_LOGO_URL_COLUMN, artistInfo.sourceLogoURL)
             put(ARTIST_PAGE_ID_COLUMN, artistInfo.infoURL)
         }
         return values
     }
 
-    override fun getCardByName(cardName: String): Card? {
+    override fun getCardsByName(cardName: String): List<Card>? {
             val cursor = createCursor(cardName)
             return cursorToWikipediaCard.map(cursor)
         }

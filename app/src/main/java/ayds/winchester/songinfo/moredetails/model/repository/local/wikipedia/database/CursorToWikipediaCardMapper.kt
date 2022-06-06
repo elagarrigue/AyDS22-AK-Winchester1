@@ -6,27 +6,30 @@ import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import java.sql.SQLException
 
 interface CursorToWikipediaCardMapper {
-    fun map(cursor: Cursor): Card?
+    fun map(cursor: Cursor): List<Card>?
 }
 
 internal class CursorToWikipediaCardMapperImpl : CursorToWikipediaCardMapper {
 
-    override fun map(cursor: Cursor): Card? =
+    override fun map(cursor: Cursor): List<Card>? =
         try {
+            val resultList: MutableList<Card> = emptyList<Card>().toMutableList()
             with(cursor) {
-                if (moveToNext()) {
+                while (moveToNext()) {
                     val storedCardSourceOrdinal = cursor.getInt(getColumnIndexOrThrow(
                         SOURCE_COLUMN
                     ))
-                    Card(
+                    resultList.add(Card(
                         description = getString(getColumnIndexOrThrow(INFO_COLUMN)),
                         infoURL = getString(getColumnIndexOrThrow(ARTIST_PAGE_ID_COLUMN)),
                         source = CardSource.values()[storedCardSourceOrdinal],
-                        sourceLogoURL = ""
-                    )
-                } else {
-                    null
+                        sourceLogoURL = getString(getColumnIndexOrThrow(SOURCE_LOGO_URL_COLUMN))
+                    ))
                 }
+                return if (resultList.isEmpty())
+                    null
+                else
+                    resultList
             }
         } catch (e: SQLException) {
             e.printStackTrace()
