@@ -32,7 +32,7 @@ internal class InfoRepositoryImpl(
                 }
             }
         }
-        return cards ?: listOf<Card>(EmptyCard)
+        return cards ?: emptyList()
     }
 
     private fun markCardAsLocal(card: Card) {
