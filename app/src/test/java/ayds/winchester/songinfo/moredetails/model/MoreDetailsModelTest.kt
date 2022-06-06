@@ -20,7 +20,7 @@ class MoreDetailsModelTest {
         val artistInfo: Card = mockk()
         every { repository.getCardByName("artistName") } returns artistInfo
         val artistInfoTester: (Card) -> Unit = mockk(relaxed = true)
-        moreDetailsModel.cardObservable.subscribe {
+        moreDetailsModel.cardsObservable.subscribe {
             artistInfoTester(it)
         }
         moreDetailsModel.searchCard("artistName")

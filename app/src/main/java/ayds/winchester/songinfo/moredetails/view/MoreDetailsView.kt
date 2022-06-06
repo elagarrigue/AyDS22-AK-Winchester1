@@ -80,8 +80,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initObservers() {
-        moreDetailsModel.cardObservable
-            .subscribe { value -> updateArtistInfo(value) }
+        moreDetailsModel.cardsObservable
+            .subscribe { value -> updateArtistInfo(value.first()) }
 
     }
 

@@ -5,20 +5,14 @@ import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.
 
 interface Broker {
 
-    fun getCard(artist: String?): Card
+    fun getCards(artist: String?): List<Card>
 }
 
 internal class BrokerImpl(private val proxies: List<Proxy>) : Broker {
 
-    private var proxiesIterator: Iterator<Proxy> = proxies.iterator()
-
-    private fun nextProxy(): Proxy {
-        if (!proxiesIterator.hasNext())
-            proxiesIterator = proxies.iterator()
-        return proxiesIterator.next()
-    }
-
-    override fun getCard(artist: String?): Card {
-        return nextProxy().getCard(artist);
+    override fun getCards(artist: String?): List<Card> {
+        return proxies.map {
+            it.getCard(artist)
+        }
     }
 }
