@@ -8,12 +8,12 @@ import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 
 internal class ProxyLastFM () : Proxy {
-    private val lastFMService : LastFMService = LastFMInjector.lastFMService
+    private val lastFMCardService : LastFMService = LastFMInjector.lastFMService
 
 
     override fun getCard(artist: String?): Card {
         var card : Card?
-        val lastFmArtistInfo = artist?.let { lastFMService.getArtistBio(it) }
+        val lastFmArtistInfo = artist?.let { lastFMCardService.getArtistBio(it) }
         card = lastFmArtistInfo?.mapToCard()
         return card ?: EmptyCard
     }

@@ -8,11 +8,11 @@ import ayds.newyork2.newyorkdata.nytimes.NYTimesService
 import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 
 internal class ProxyNewYorkTimes () : Proxy{
-    private val nytService : NYTimesService = NYTimesInjector.nyTimesService
+    private val newYorkTimesCardService : NYTimesService = NYTimesInjector.nyTimesService
 
     override fun getCard(artist: String?): Card {
         var card: Card?
-        val nytArtistInfo = artist?.let { nytService.getArtist(it) }
+        val nytArtistInfo = artist?.let { newYorkTimesCardService.getArtist(it) }
         card = nytArtistInfo?.mapToCard()
         return card ?: EmptyCard
     }

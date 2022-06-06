@@ -5,11 +5,11 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import java.sql.SQLException
 
-interface CursorToWikipediaCardMapper {
+interface CursorToCardMapper {
     fun map(cursor: Cursor): List<Card>?
 }
 
-internal class CursorToWikipediaCardMapperImpl : CursorToWikipediaCardMapper {
+internal class CursorToCardMapperImpl : CursorToCardMapper {
 
     override fun map(cursor: Cursor): List<Card>? =
         try {

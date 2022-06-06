@@ -13,7 +13,7 @@ private const val DATABASE_VERSION = 1
 
 internal class MoreDetailsDataBaseImpl(
     context: Context,
-    private val cursorToWikipediaCard: CursorToWikipediaCardMapper,
+    private val cursorToCard: CursorToCardMapper,
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
     MoreDetailsDataBase {
 
@@ -32,8 +32,8 @@ internal class MoreDetailsDataBaseImpl(
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    override fun saveArtist(artistName: String?, wikipedia: Card) {
-            val values = createContentValues(artistName,wikipedia)
+    override fun saveArtist(artistName: String?, card: Card) {
+            val values = createContentValues(artistName, card)
             writableDatabase?.insert(ARTISTS_TABLE, null, values)
     }
 
@@ -50,7 +50,7 @@ internal class MoreDetailsDataBaseImpl(
 
     override fun getCardsByName(cardName: String): List<Card>? {
             val cursor = createCursor(cardName)
-            return cursorToWikipediaCard.map(cursor)
+            return cursorToCard.map(cursor)
         }
 
     private fun createCursor(artist: String): Cursor {
