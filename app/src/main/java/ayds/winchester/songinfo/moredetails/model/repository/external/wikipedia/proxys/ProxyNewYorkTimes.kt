@@ -5,8 +5,7 @@ import ayds.newyork2.newyorkdata.nytimes.NYTimesInjector
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork2.newyorkdata.nytimes.NYTimesService
-
-private const val SOURCE = "New York Times"
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 
 internal class ProxyNewYorkTimes () : Proxy{
     private val nytService : NYTimesService = NYTimesInjector.nyTimesService
@@ -18,15 +17,11 @@ internal class ProxyNewYorkTimes () : Proxy{
         return card ?: EmptyCard
     }
 
-    override fun getSource(): String {
-        return SOURCE
-    }
-
     private fun NYTimesArtistInfo.mapToCard(): Card {
         return Card(
             this.artistInfo,
             this.artistUrl,
-            getSource(),
+            CardSource.NEW_YORK_TIMES,
             this.source_logo_url,
             false
         )

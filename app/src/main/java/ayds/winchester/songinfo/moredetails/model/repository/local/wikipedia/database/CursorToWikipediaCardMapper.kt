@@ -2,6 +2,7 @@ package ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.da
 
 import android.database.Cursor
 import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import java.sql.SQLException
 
 interface CursorToWikipediaCardMapper {
@@ -14,10 +15,13 @@ internal class CursorToWikipediaCardMapperImpl : CursorToWikipediaCardMapper {
         try {
             with(cursor) {
                 if (moveToNext()) {
+                    val storedCardSourceOrdinal = cursor.getInt(getColumnIndexOrThrow(
+                        SOURCE_COLUMN
+                    ))
                     Card(
                         description = getString(getColumnIndexOrThrow(INFO_COLUMN)),
                         infoURL = getString(getColumnIndexOrThrow(ARTIST_PAGE_ID_COLUMN)),
-                        source = getString(getColumnIndexOrThrow(SOURCE_COLUMN)),
+                        source = CardSource.values()[storedCardSourceOrdinal],
                         sourceLogoURL = ""
                     )
                 } else {

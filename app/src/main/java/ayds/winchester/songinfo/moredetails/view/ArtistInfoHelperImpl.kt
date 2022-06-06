@@ -1,6 +1,7 @@
 package ayds.winchester.songinfo.moredetails.view
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 
 const val OPEN_HTML_TAG = "<html><div width=400><font face=\"arial\">"
 const val CLOSE_HTML_TAG = "</font></div></html>"
@@ -16,6 +17,7 @@ const val NOT_FOUND = "Artist not found"
 
 interface ArtistInfoHelper {
     fun artistInfoTextToHtml(artistInfo: Card, artistName: String): String
+    fun getStringFromCardSource(cardSource : CardSource) : String
 }
 
 internal class ArtistInfoHelperImpl : ArtistInfoHelper {
@@ -46,6 +48,15 @@ internal class ArtistInfoHelperImpl : ArtistInfoHelper {
                 return buildHtml(textWithBold)
             }
             else -> NOT_FOUND
+        }
+    }
+
+    override fun getStringFromCardSource(cardSource: CardSource): String {
+        return when (cardSource) {
+            CardSource.WIKIPEDIA -> "Wikipedia"
+            CardSource.NEW_YORK_TIMES -> "New York Times"
+            CardSource.LAST_FM -> "Last FM"
+            CardSource.EMPTY -> "Empty Card"
         }
     }
 }
