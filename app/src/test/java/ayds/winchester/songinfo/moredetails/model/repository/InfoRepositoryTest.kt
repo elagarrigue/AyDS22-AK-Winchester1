@@ -22,7 +22,7 @@ class InfoRepositoryTest {
     }
 
     @Test
-    fun `given existing artist info by artistName should return artist info and mark it as local`() {
+    fun `given existing artist info by artistName should return artist info card collection and mark them as local`() {
         val artistInfo: List<Card> = mockk(relaxed = true)
         every { cardLocalStorage.getCardsByName("artistName") } returns artistInfo
 
@@ -33,7 +33,7 @@ class InfoRepositoryTest {
     }
 
     @Test
-    fun `given non existing artist info by artistName should get the artist info and store it`() {
+    fun `given non existing artist info by artistName should get the artist info cards and store them`() {
         val artistInfo: List<Card> = listOf(EmptyCard)
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } returns artistInfo
@@ -49,7 +49,7 @@ class InfoRepositoryTest {
     }
 
     @Test
-    fun `given non existing artist info by artistName should return empty collection of cards`() {
+    fun `given non existing artist info by artistName should return empty collection of artist info cards`() {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } returns listOf(EmptyCard)
 
@@ -59,7 +59,7 @@ class InfoRepositoryTest {
     }
 
     @Test
-    fun `given service exception should return empty collection of cards`() {
+    fun `given service exception should return empty collection of artist info cards`() {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } throws mockk<Exception>()
 

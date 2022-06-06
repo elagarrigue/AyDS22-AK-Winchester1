@@ -36,7 +36,7 @@ class ArtistInfoHelperTest {
     }
 
     @Test
-    fun `given a non local song it should return the description`() {
+    fun `given a non local artist it should return the description`() {
         val artistName = "Stone Temple Pilots"
 
         val artistInfo: Card = Card(
@@ -59,7 +59,7 @@ class ArtistInfoHelperTest {
     }
 
     @Test
-    fun `given a non spotify song it should return the song not found description`() {
+    fun `given a empty artist info card it should return the artist not found description`() {
         val artistInfo: EmptyCard = mockk()
         val artistName = "Test"
 
