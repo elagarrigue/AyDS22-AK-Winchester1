@@ -1,7 +1,7 @@
 package ayds.winchester.songinfo.moredetails.view
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
@@ -15,11 +15,11 @@ class ArtistInfoHelperTest {
 
         val artistName = "Stone Temple Pilots"
 
-        val artistInfo: Card = WikipediaCard(
+        val artistInfo: Card = Card(
             "Stone Temple Pilots (also known by the initials STP) is an American" +
                     " rock band from San Diego, California.",
             "1234",
-            "",
+            CardSource.WIKIPEDIA,
             "",
             true
         )
@@ -38,11 +38,11 @@ class ArtistInfoHelperTest {
     fun `given a non local song it should return the description`() {
         val artistName = "Stone Temple Pilots"
 
-        val artistInfo: Card = WikipediaCard(
+        val artistInfo: Card = Card(
             "Stone Temple Pilots (also known by the initials STP) is an American" +
                     " rock band from San Diego, California.",
             "1234",
-            "",
+            CardSource.WIKIPEDIA,
             "",
             false
         )

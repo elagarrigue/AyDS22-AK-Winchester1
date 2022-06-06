@@ -1,7 +1,9 @@
 package ayds.winchester.songinfo.moredetails.model.repository
 
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaCard
+import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.BrokerImpl
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 import io.mockk.every
 import io.mockk.mockk
@@ -14,17 +16,18 @@ class InfoRepositoryTest {
 
     private val wikipediaLocalStorage: MoreDetailsDataBase = mockk(relaxUnitFun = true)
     private val wikipediaCardService: ayds.winchester1.wikipedia.WikipediaCardService = mockk(relaxUnitFun = true)
+    private val broker: BrokerImpl = mockk()
 
     private val infoRepository: InfoRepository by lazy {
-        InfoRepositoryImpl(wikipediaLocalStorage, wikipediaCardService)
+        InfoRepositoryImpl(wikipediaLocalStorage, broker)
     }
 
     @Test
     fun `given existing artis info by artistName should return artist info and mark it as local`() {
-        val artistInfo = WikipediaCard("description", "infoURL","","", false)
+        val artistInfo = Card("description", "infoURL",CardSource.WIKIPEDIA,"", false)
         every { wikipediaLocalStorage.getCardByName("artistName") } returns artistInfo
 
-        val result = infoRepository.getCardByName("artistName")
+        val result = infoRepository.getCardByName("artistName").first()
 
         Assert.assertEquals(artistInfo, result)
         Assert.assertTrue(artistInfo.isLocallyStored)
@@ -32,7 +35,7 @@ class InfoRepositoryTest {
 
     @Test
     fun `given non existing artist info by artistName should get the artist info and store it`() {
-        val artistInfo = WikipediaCard("description", "infoURL","","", false)
+        val artistInfo = Card("description", "infoURL",CardSource.WIKIPEDIA,"", false)
         every { wikipediaLocalStorage.getCardByName("artistName") } returns null
         every { wikipediaCardService.getCard("artistName") } returns artistInfo
 
@@ -48,7 +51,7 @@ class InfoRepositoryTest {
         every { wikipediaLocalStorage.getCardByName("artistName") } returns null
         every { wikipediaCardService.getCard("artistName") } returns null
 
-        val result = infoRepository.getCardByName("artistName")
+        val result = infoRepository.getCardByName("artistName").first()
 
         Assert.assertEquals(EmptyCard, result)
     }
@@ -58,7 +61,7 @@ class InfoRepositoryTest {
         every { wikipediaLocalStorage.getCardByName("artistName") } returns null
         every { wikipediaCardService.getCard("artistName") } throws mockk<Exception>()
 
-        val result = infoRepository.getCardByName("artistName")
+        val result = infoRepository.getCardByName("artistName").first()
 
         Assert.assertEquals(EmptyCard, result)
     }
