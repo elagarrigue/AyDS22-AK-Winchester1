@@ -153,7 +153,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateSourceInfo() {
         runOnUiThread {
-            sourceInfoTextView.text = Html.fromHtml(uiState.sourceInfo)
+            sourceInfoTextView.text = Html.fromHtml(artistInfoHelper.getStringFromCardSource(uiState.sourceInfo))
         }
     }
 
