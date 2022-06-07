@@ -25,7 +25,7 @@ class CardsRepositoryTest {
         val artistInfo: List<Card> = mockk(relaxed = true)
         every { cardLocalStorage.getCardsByName("artistName") } returns artistInfo
 
-        val result = cardsRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByTerm("artistName")
 
         Assert.assertEquals(artistInfo, result)
         artistInfo.forEach{Assert.assertTrue(it.isLocallyStored)}
@@ -37,7 +37,7 @@ class CardsRepositoryTest {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } returns artistInfo
 
-        val result = cardsRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByTerm("artistName")
 
         Assert.assertEquals(artistInfo, result)
         artistInfo.forEach{
@@ -52,7 +52,7 @@ class CardsRepositoryTest {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } returns listOf(EmptyCard)
 
-        val result = cardsRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByTerm("artistName")
 
         Assert.assertEquals(listOf(EmptyCard), result)
     }
@@ -62,7 +62,7 @@ class CardsRepositoryTest {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } throws mockk<Exception>()
 
-        val result = cardsRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByTerm("artistName")
 
         Assert.assertEquals(emptyList<Card>(), result)
     }

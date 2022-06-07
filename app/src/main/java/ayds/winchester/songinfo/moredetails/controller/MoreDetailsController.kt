@@ -35,7 +35,7 @@ internal class MoreDetailsControllerImpl(
 
     private fun searchArtist() {
         Thread {
-            moreDetailsModel.searchCard(moreDetailsView.uiState.artistName)
+            moreDetailsModel.searchCards(moreDetailsView.uiState.artistName)
         }.start()
     }
 

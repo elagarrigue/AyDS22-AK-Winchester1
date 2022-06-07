@@ -8,15 +8,15 @@ import ayds.winchester.songinfo.moredetails.model.repository.CardsRepository
 interface MoreDetailsModel {
     val cardsObservable: Observable<List<Card>>
 
-    fun searchCard(cardName: String)
+    fun searchCards(term: String)
 }
 
 internal class MoreDetailsModelImpl(private val repository: CardsRepository) : MoreDetailsModel {
 
     override val cardsObservable = Subject<List<Card>>()
 
-    override fun searchCard(cardName: String) {
-        repository.getCardsByName(cardName).let{
+    override fun searchCards(term: String) {
+        repository.getCardsByTerm(term).let{
             cardsObservable.notify(it)
         }
     }

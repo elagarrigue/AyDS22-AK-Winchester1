@@ -18,12 +18,12 @@ class MoreDetailsModelTest {
     @Test
     fun `on search artist info it should notify the result`() {
         val artistInfo: List<Card> = mockk()
-        every { repository.getCardsByName("artistName") } returns artistInfo
+        every { repository.getCardsByTerm("artistName") } returns artistInfo
         val artistInfoTester: (List<Card>) -> Unit = mockk(relaxed = true)
         moreDetailsModel.cardsObservable.subscribe {
             artistInfoTester(it)
         }
-        moreDetailsModel.searchCard("artistName")
+        moreDetailsModel.searchCards("artistName")
         verify { artistInfoTester(artistInfo) }
     }
 }
