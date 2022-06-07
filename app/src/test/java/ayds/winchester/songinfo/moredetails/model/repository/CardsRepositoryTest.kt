@@ -34,7 +34,7 @@ class CardsRepositoryTest {
     @Test
     fun `given non existing artist info by artistName should get the artist info cards and store them`() {
         val artistInfo: List<Card> = listOf(EmptyCard)
-        every { cardLocalStorage.getCardsByName("artistName") } returns null
+        every { cardLocalStorage.getCardsByName("artistName") } returns emptyList()
         every { broker.getCards("artistName") } returns artistInfo
 
         val result = cardsRepository.getCardsByTerm("artistName")
@@ -49,7 +49,7 @@ class CardsRepositoryTest {
 
     @Test
     fun `given non existing artist info by artistName should return empty collection of artist info cards`() {
-        every { cardLocalStorage.getCardsByName("artistName") } returns null
+        every { cardLocalStorage.getCardsByName("artistName") } returns emptyList()
         every { broker.getCards("artistName") } returns listOf(EmptyCard)
 
         val result = cardsRepository.getCardsByTerm("artistName")
@@ -59,7 +59,7 @@ class CardsRepositoryTest {
 
     @Test
     fun `given service exception should return empty collection of artist info cards`() {
-        every { cardLocalStorage.getCardsByName("artistName") } returns null
+        every { cardLocalStorage.getCardsByName("artistName") } returns mutableListOf()
         every { broker.getCards("artistName") } throws mockk<Exception>()
 
         val result = cardsRepository.getCardsByTerm("artistName")

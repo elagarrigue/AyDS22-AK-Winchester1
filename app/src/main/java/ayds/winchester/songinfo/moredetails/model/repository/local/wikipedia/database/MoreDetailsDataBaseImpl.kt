@@ -48,7 +48,7 @@ internal class MoreDetailsDataBaseImpl(
         return values
     }
 
-    override fun getCardsByName(cardName: String): List<Card>? {
+    override fun getCardsByName(cardName: String): List<Card> {
             val cursor = createCursor(cardName)
             return cursorToCard.map(cursor)
         }

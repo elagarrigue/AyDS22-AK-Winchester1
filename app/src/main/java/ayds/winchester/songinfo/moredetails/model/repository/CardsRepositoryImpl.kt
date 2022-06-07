@@ -1,6 +1,7 @@
 package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.Broker
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
 
@@ -15,9 +16,9 @@ internal class CardsRepositoryImpl(
 
     override fun getCardsByTerm(term: String): List<Card> {
 
-        var cards: List<Card>? = cardLocalStorage.getCardsByName(term)
+        var cards: List<Card> = cardLocalStorage.getCardsByName(term)
         when {
-            cards != null -> cards.forEach {
+            cards.isNotEmpty() -> cards.forEach {
                 markCardAsLocal(it)
             }
             else -> {
@@ -27,11 +28,11 @@ internal class CardsRepositoryImpl(
                         cardLocalStorage.saveArtist(term, it)
                     }
                 } catch (e: Exception) {
-                    cards = null
+                    return emptyList<Card>()
                 }
             }
         }
-        return cards ?: emptyList()
+        return cards
     }
 
     private fun markCardAsLocal(card: Card) {

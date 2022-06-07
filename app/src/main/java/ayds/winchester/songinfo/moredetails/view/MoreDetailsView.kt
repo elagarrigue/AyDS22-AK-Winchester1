@@ -60,7 +60,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initProperties() {
-        artistInfoTextView = findViewById(R.id.textPane2)
+        artistInfoTextView = findViewById(R.id.artistInfoTextView)
         viewFullArticleButton = findViewById(R.id.openUrlButton)
         logoImageView = findViewById(R.id.imageView)
         sourceInfoTextView = findViewById(R.id.sourceInfoTextView)
@@ -110,7 +110,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
                     pageUrl = it.infoURL,
                     info = cardInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
                     sourceInfo = it.source,
-                    IMAGE_URL = it.sourceLogoURL,
+                    imageUrl = it.sourceLogoURL,
                     actionsEnabled = true,
                 )
             },
@@ -125,7 +125,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
                     pageUrl = it.infoURL,
                     info = cardInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
                     sourceInfo = it.source,
-                    IMAGE_URL = it.sourceLogoURL,
+                    imageUrl = it.sourceLogoURL,
                     actionsEnabled = false,
                 )
             }),
@@ -152,7 +152,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initLogoImage() {
         runOnUiThread {
-            imageLoader.loadImageIntoView(uiState.getCard().IMAGE_URL, logoImageView)
+            imageLoader.loadImageIntoView(uiState.getCard().imageUrl, logoImageView)
         }
     }
 
