@@ -1,7 +1,6 @@
 package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.BrokerImpl
 import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
@@ -12,13 +11,13 @@ import org.junit.Assert
 import org.junit.Test
 import java.lang.Exception
 
-class InfoRepositoryTest {
+class CardsRepositoryTest {
 
     private val cardLocalStorage: MoreDetailsDataBase = mockk(relaxUnitFun = true)
     private val broker: BrokerImpl = mockk(relaxed = true)
 
-    private val infoRepository: InfoRepository by lazy {
-        InfoRepositoryImpl(cardLocalStorage, broker)
+    private val cardsRepository: CardsRepository by lazy {
+        CardsRepositoryImpl(cardLocalStorage, broker)
     }
 
     @Test
@@ -26,7 +25,7 @@ class InfoRepositoryTest {
         val artistInfo: List<Card> = mockk(relaxed = true)
         every { cardLocalStorage.getCardsByName("artistName") } returns artistInfo
 
-        val result = infoRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByName("artistName")
 
         Assert.assertEquals(artistInfo, result)
         artistInfo.forEach{Assert.assertTrue(it.isLocallyStored)}
@@ -38,7 +37,7 @@ class InfoRepositoryTest {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } returns artistInfo
 
-        val result = infoRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByName("artistName")
 
         Assert.assertEquals(artistInfo, result)
         artistInfo.forEach{
@@ -53,7 +52,7 @@ class InfoRepositoryTest {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } returns listOf(EmptyCard)
 
-        val result = infoRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByName("artistName")
 
         Assert.assertEquals(listOf(EmptyCard), result)
     }
@@ -63,7 +62,7 @@ class InfoRepositoryTest {
         every { cardLocalStorage.getCardsByName("artistName") } returns null
         every { broker.getCards("artistName") } throws mockk<Exception>()
 
-        val result = infoRepository.getCardsByName("artistName")
+        val result = cardsRepository.getCardsByName("artistName")
 
         Assert.assertEquals(emptyList<Card>(), result)
     }

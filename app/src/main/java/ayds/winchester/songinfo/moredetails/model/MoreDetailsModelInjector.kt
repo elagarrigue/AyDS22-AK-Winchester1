@@ -1,8 +1,8 @@
 package ayds.winchester.songinfo.moredetails.model
 
 import android.content.Context
-import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
-import ayds.winchester.songinfo.moredetails.model.repository.InfoRepositoryImpl
+import ayds.winchester.songinfo.moredetails.model.repository.CardsRepository
+import ayds.winchester.songinfo.moredetails.model.repository.CardsRepositoryImpl
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.Broker
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.BrokerImpl
 import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys.Proxy
@@ -29,8 +29,8 @@ object MoreDetailsModelInjector {
             ProxyNewYorkTimes()
         )
         val broker: Broker = BrokerImpl(proxies)
-        val repository: InfoRepository =
-            InfoRepositoryImpl(moreDetailsDataBase, broker)
+        val repository: CardsRepository =
+            CardsRepositoryImpl(moreDetailsDataBase, broker)
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }
 }

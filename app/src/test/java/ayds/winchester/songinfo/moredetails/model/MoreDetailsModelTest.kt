@@ -1,7 +1,7 @@
 package ayds.winchester.songinfo.moredetails.model
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
+import ayds.winchester.songinfo.moredetails.model.repository.CardsRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -9,7 +9,7 @@ import org.junit.Test
 
 class MoreDetailsModelTest {
 
-    private val repository: InfoRepository = mockk()
+    private val repository: CardsRepository = mockk()
 
     private val moreDetailsModel: MoreDetailsModel by lazy {
         MoreDetailsModelImpl(repository)
