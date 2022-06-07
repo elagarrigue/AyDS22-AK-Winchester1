@@ -5,10 +5,11 @@ import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester1.wikipedia.WikipediaArtistInfo
 import ayds.winchester1.wikipedia.WikipediaService
-import ayds.winchester1.wikipedia.WikipediaInjector
 
-internal class ProxyWikipedia () : Proxy {
-    private val wikipediaService: WikipediaService = WikipediaInjector.wikipediaService
+internal class ProxyWikipedia (
+    private val wikipediaService: WikipediaService
+) : Proxy {
+
 
     override fun getCard(artist: String?): Card {
         var card: Card?
