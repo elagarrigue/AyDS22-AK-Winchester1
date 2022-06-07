@@ -16,12 +16,12 @@ const val SPACE = " "
 const val STORED = "[*]"
 const val NOT_FOUND = "Artist not found"
 
-interface ArtistInfoHelper {
+interface CardInfoHelper {
     fun artistInfoTextToHtml(artistInfo: Card, artistName: String): String
     fun getStringFromCardSource(cardSource : CardSource) : String
 }
 
-internal class ArtistInfoHelperImpl : ArtistInfoHelper {
+internal class CardInfoHelperImpl : CardInfoHelper {
 
     private fun addBoldToInfo(info: String, artistName: String): String {
         return info

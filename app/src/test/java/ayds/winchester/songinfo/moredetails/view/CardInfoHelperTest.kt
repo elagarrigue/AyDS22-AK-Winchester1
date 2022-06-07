@@ -7,9 +7,9 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 
-class ArtistInfoHelperTest {
+class CardInfoHelperTest {
 
-    private val artistInfoHelper by lazy { ArtistInfoHelperImpl() }
+    private val artistInfoHelper by lazy { CardInfoHelperImpl() }
 
     @Test
     fun `given a local artist it should return the description`() {

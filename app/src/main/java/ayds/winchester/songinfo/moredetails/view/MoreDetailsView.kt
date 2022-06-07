@@ -29,7 +29,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
-    private val artistInfoHelper: ArtistInfoHelper = MoreDetailsViewInjector.artistInfoHelper
+    private val cardInfoHelper: CardInfoHelper = MoreDetailsViewInjector.CARD_INFO_HELPER
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private lateinit var moreDetailsModel: MoreDetailsModel
@@ -108,7 +108,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             cards = cards.map {
                 CardUiState(
                     pageUrl = it.infoURL,
-                    info = artistInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
+                    info = cardInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
                     sourceInfo = it.source,
                     IMAGE_URL = it.sourceLogoURL,
                     actionsEnabled = true,
@@ -123,7 +123,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             cards = listOf(EmptyCard.let{
                 CardUiState(
                     pageUrl = it.infoURL,
-                    info = artistInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
+                    info = cardInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
                     sourceInfo = it.source,
                     IMAGE_URL = it.sourceLogoURL,
                     actionsEnabled = false,
@@ -168,7 +168,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateSourceInfo() {
         runOnUiThread {
             sourceInfoTextView.text =
-                Html.fromHtml(artistInfoHelper.getStringFromCardSource(uiState.getCard().sourceInfo))
+                Html.fromHtml(cardInfoHelper.getStringFromCardSource(uiState.getCard().sourceInfo))
         }
     }
 
