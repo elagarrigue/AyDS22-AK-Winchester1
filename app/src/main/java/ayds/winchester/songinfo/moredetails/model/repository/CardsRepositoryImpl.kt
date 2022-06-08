@@ -1,9 +1,8 @@
 package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.Broker
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
+import ayds.winchester.songinfo.moredetails.model.repository.external.Broker
+import ayds.winchester.songinfo.moredetails.model.repository.local.MoreDetailsDataBase
 
 interface CardsRepository {
     fun getCardsByTerm(term: String): List<Card>

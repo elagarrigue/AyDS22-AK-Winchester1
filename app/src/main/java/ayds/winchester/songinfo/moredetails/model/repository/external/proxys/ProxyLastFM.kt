@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys
+package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
 
 import ayds.lisboa1.lastfm.LastFMArtistBiography
 import ayds.lisboa1.lastfm.LastFMService

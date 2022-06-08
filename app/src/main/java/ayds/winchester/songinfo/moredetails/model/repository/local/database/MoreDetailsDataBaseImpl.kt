@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.database
+package ayds.winchester.songinfo.moredetails.model.repository.local.database
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
@@ -6,7 +6,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
+import ayds.winchester.songinfo.moredetails.model.repository.local.MoreDetailsDataBase
 
 private const val DATABASE_NAME = "dictionary.db"
 private const val DATABASE_VERSION = 1

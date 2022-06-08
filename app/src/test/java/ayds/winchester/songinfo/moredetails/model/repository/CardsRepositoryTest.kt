@@ -2,8 +2,8 @@ package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.BrokerImpl
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.MoreDetailsDataBase
+import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerImpl
+import ayds.winchester.songinfo.moredetails.model.repository.local.MoreDetailsDataBase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

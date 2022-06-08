@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.proxys
+package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
 
 import ayds.newyork2.newyorkdata.nytimes.NYTimesArtistInfo
 import ayds.winchester.songinfo.moredetails.model.entities.Card
@@ -8,7 +8,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 
 internal class ProxyNewYorkTimes (
     private val newYorkTimesService : NYTimesService
-        ) : Proxy{
+        ) : Proxy {
 
     override fun getCard(artist: String?): Card {
         var card: Card?

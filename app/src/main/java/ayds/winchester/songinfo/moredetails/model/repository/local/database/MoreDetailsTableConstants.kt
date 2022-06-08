@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.database
+package ayds.winchester.songinfo.moredetails.model.repository.local.database
 
 const val ARTISTS_TABLE = "artists"
 const val ID_COLUMN = "id"
