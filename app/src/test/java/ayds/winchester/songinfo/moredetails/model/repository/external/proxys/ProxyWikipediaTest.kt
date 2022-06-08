@@ -16,19 +16,22 @@ class ProxyWikipediaTest {
     }
 
     @Test
-    fun `on found artist name should return artist info card `() {
+    fun `on found artist name should return artist info card`() {
         val emptyCard: EmptyCard = mockk(relaxed = true)
         val infoCard: Card = mockk(relaxed = true)
+
         every { proxyWikipedia.getCard("artistName") } returns infoCard
+
         Assert.assertNotEquals(emptyCard, infoCard)
     }
 
     @Test
-    fun `on not found artist name should return artist info empty card `() {
+    fun `on not found artist name should return artist info empty card`() {
         val emptyCard: EmptyCard = mockk(relaxed = true)
         val infoCard: Card = mockk(relaxed = true)
+
         every { proxyWikipedia.getCard("artistName") } returns emptyCard
+
         Assert.assertNotEquals(emptyCard, infoCard)
     }
-
 }
