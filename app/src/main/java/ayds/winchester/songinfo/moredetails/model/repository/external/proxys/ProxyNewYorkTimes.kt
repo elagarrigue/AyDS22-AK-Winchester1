@@ -11,12 +11,11 @@ internal class ProxyNewYorkTimes (
         ) : Proxy {
 
     override fun getCard(artist: String?): Card {
-        var card: Card?
-        try{
+        var card: Card? = try{
             val nytArtistInfo = artist?.let { newYorkTimesService.getArtist(it) }
-            card = nytArtistInfo?.mapToCard()
+            nytArtistInfo?.mapToCard()
         }catch(e:Exception){
-            card= null
+            null
         }
         return card ?: EmptyCard
     }
