@@ -32,9 +32,9 @@ internal class MoreDetailsDataBaseImpl(
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    override fun saveArtist(artistName: String?, card: Card) {
+    override fun saveCards(artistName: String?, card: Card) {
             val values = createContentValues(artistName, card)
-            writableDatabase?.insert(ARTISTS_TABLE, null, values)
+            writableDatabase?.insert(CARDS_TABLE, null, values)
     }
 
     private fun createContentValues(artistName: String?, artistInfo: Card) :ContentValues{
@@ -55,7 +55,7 @@ internal class MoreDetailsDataBaseImpl(
 
     private fun createCursor(artist: String): Cursor {
         return readableDatabase.query(
-            ARTISTS_TABLE,
+            CARDS_TABLE,
             projection,
             "$ARTIST_COLUMN= ?",
             arrayOf(artist),

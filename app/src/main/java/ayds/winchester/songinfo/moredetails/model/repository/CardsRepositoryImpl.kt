@@ -24,7 +24,7 @@ internal class CardsRepositoryImpl(
                 try {
                     cards = broker.getCards(term)
                     cards.forEach {
-                        cardLocalStorage.saveArtist(term, it)
+                        cardLocalStorage.saveCards(term, it)
                     }
                 } catch (e: Exception) {
                     return emptyList<Card>()

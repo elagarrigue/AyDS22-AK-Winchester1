@@ -42,7 +42,7 @@ class CardsRepositoryTest {
         Assert.assertEquals(artistInfo, result)
         artistInfo.forEach{
             Assert.assertFalse(it.isLocallyStored)
-            verify { cardLocalStorage.saveArtist("artistName", it) }
+            verify { cardLocalStorage.saveCards("artistName", it) }
         }
 
     }
