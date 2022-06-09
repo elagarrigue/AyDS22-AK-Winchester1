@@ -14,21 +14,16 @@ internal class CardsRepositoryImpl(
 ) : CardsRepository {
 
     override fun getCardsByTerm(term: String): List<Card> {
-
         var cards: List<Card> = cardLocalStorage.getCardsByName(term)
         when {
             cards.isNotEmpty() -> cards.forEach {
                 markCardAsLocal(it)
             }
             else -> {
-                try {
                     cards = broker.getCards(term)
                     cards.forEach {
                         cardLocalStorage.saveCards(term, it)
                     }
-                } catch (e: Exception) {
-                    return emptyList<Card>()
-                }
             }
         }
         return cards

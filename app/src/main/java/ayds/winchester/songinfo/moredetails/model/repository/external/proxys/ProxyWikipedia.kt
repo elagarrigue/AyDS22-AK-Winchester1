@@ -10,11 +10,14 @@ internal class ProxyWikipedia (
     private val wikipediaService: WikipediaService
 ) : Proxy {
 
-
     override fun getCard(artist: String?): Card {
         var card: Card?
-        val wikipediaArtistInfo = wikipediaService.getArtistInfo(artist)
-        card = wikipediaArtistInfo?.mapToCard()
+        try {
+            val wikipediaArtistInfo = wikipediaService.getArtistInfo(artist)
+            card = wikipediaArtistInfo?.mapToCard()
+        } catch(e: Exception) {
+                card= null
+        }
         return card ?: EmptyCard
     }
 

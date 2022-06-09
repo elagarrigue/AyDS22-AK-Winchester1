@@ -12,8 +12,12 @@ internal class ProxyLastFM (
 
     override fun getCard(artist: String?): Card {
         var card : Card?
-        val lastFmArtistInfo = artist?.let { lastFMService.getArtistBio(it) }
+        try{
+            val lastFmArtistInfo = artist?.let { lastFMService.getArtistBio(it) }
         card = lastFmArtistInfo?.mapToCard()
+        }catch (e:Exception){
+            card=null
+        }
         return card ?: EmptyCard
     }
 
