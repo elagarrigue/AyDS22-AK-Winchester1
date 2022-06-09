@@ -20,10 +20,10 @@ internal class MoreDetailsDataBaseImpl(
     private val projection = arrayOf(
         ID_COLUMN,
         ARTIST_COLUMN,
-        INFO_COLUMN,
+        DESCRIPTION_COLUMN,
         SOURCE_COLUMN,
         SOURCE_LOGO_URL_COLUMN,
-        ARTIST_PAGE_ID_COLUMN
+        INFO_URL_COLUMN
     )
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -40,10 +40,10 @@ internal class MoreDetailsDataBaseImpl(
     private fun createContentValues(artistName: String?, artistInfo: Card) :ContentValues{
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artistName)
-            put(INFO_COLUMN, artistInfo.description)
+            put(DESCRIPTION_COLUMN, artistInfo.description)
             put(SOURCE_COLUMN, artistInfo.source.ordinal)
             put(SOURCE_LOGO_URL_COLUMN, artistInfo.sourceLogoURL)
-            put(ARTIST_PAGE_ID_COLUMN, artistInfo.infoURL)
+            put(INFO_URL_COLUMN, artistInfo.infoURL)
         }
         return values
     }

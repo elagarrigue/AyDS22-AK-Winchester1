@@ -23,8 +23,8 @@ internal class CursorToCardMapperImpl : CursorToCardMapper {
                     )
                     resultList.add(
                         Card(
-                            description = getString(getColumnIndexOrThrow(INFO_COLUMN)),
-                            infoURL = getString(getColumnIndexOrThrow(ARTIST_PAGE_ID_COLUMN)),
+                            description = getString(getColumnIndexOrThrow(DESCRIPTION_COLUMN)),
+                            infoURL = getString(getColumnIndexOrThrow(INFO_URL_COLUMN)),
                             source = CardSource.values()[storedCardSourceOrdinal],
                             sourceLogoURL = getString(getColumnIndexOrThrow(SOURCE_LOGO_URL_COLUMN))
                         )
