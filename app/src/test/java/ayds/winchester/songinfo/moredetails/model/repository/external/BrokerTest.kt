@@ -3,9 +3,9 @@ package ayds.winchester.songinfo.moredetails.model.repository.external
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.repository.external.proxys.ProxyLastFM
-import ayds.winchester.songinfo.moredetails.model.repository.external.proxys.ProxyNewYorkTimes
-import ayds.winchester.songinfo.moredetails.model.repository.external.proxys.ProxyWikipedia
+import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyLastFM
+import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyNewYorkTimes
+import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyWikipedia
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals

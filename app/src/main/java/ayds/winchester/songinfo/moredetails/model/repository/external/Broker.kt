@@ -2,7 +2,7 @@ package ayds.winchester.songinfo.moredetails.model.repository.external
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.repository.external.proxys.Proxy
+import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.Proxy
 
 interface Broker {
 

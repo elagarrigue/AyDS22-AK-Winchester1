@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
+package ayds.winchester.songinfo.moredetails.model.repository.external.proxies
 
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester1.wikipedia.WikipediaArtistInfo

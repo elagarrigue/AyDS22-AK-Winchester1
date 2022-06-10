@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
+package ayds.winchester.songinfo.moredetails.model.repository.external.proxies
 
 import ayds.newyork2.newyorkdata.nytimes.NYTimesArtistInfo
 import ayds.newyork2.newyorkdata.nytimes.NYTimesService
