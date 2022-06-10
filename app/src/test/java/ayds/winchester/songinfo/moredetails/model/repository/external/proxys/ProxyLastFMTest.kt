@@ -2,13 +2,11 @@ package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
 
 import ayds.lisboa1.lastfm.LastFMArtistBiography
 import ayds.lisboa1.lastfm.LastFMService
-import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
-import java.lang.Exception
 
 class ProxyLastFMTest {
 
