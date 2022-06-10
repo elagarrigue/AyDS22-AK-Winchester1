@@ -1,5 +1,7 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
 
+import ayds.newyork2.newyorkdata.nytimes.ArtistInfo
+import ayds.newyork2.newyorkdata.nytimes.NYTimesArtistInfo
 import ayds.newyork2.newyorkdata.nytimes.NYTimesService
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
@@ -18,21 +20,22 @@ class ProxyNewYorkTimesTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val infoCard: Card = mockk(relaxed = true)
+        val artistInfo: NYTimesArtistInfo = mockk(relaxed = true)
 
-        every { proxyNewYorkTimes.getCard("artistName") } returns infoCard
+        every { newYorkTimesService.getArtist("artistName") } returns artistInfo
 
-        Assert.assertNotEquals(EmptyCard, infoCard)
+        val result = proxyNewYorkTimes.getCard("artistName")
+
+        Assert.assertNotEquals(EmptyCard, result)
     }
 
     @Test
     fun `on not found artist name should return artist info empty card`() {
-        val infoCard: Card = mockk(relaxed = true)
+        every { newYorkTimesService.getArtist("artistName") } throws mockk<Exception>()
 
-        every { proxyNewYorkTimes.getCard("artistName") } returns EmptyCard
-        every { proxyNewYorkTimes.getCard("artistName") } throws mockk<Exception>()
+        val result = proxyNewYorkTimes.getCard("artistName")
 
-        Assert.assertNotEquals(EmptyCard, infoCard)
+        Assert.assertNotEquals(EmptyCard, result)
     }
 
 }
