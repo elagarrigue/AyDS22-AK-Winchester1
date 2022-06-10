@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
 
+import ayds.lisboa1.lastfm.LastFMArtistBiography
 import ayds.lisboa1.lastfm.LastFMService
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
@@ -18,20 +19,21 @@ class ProxyLastFMTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val infoCard: Card = mockk(relaxed = true)
+        val infoCard : LastFMArtistBiography = mockk()
 
-        every { proxyLastFM.getCard("artistName") } returns infoCard
+        every { lastFMService.getArtistBio("artistName") } returns infoCard
+
+        val result = proxyLastFM.getCard("artistName")
 
         Assert.assertNotEquals(EmptyCard, infoCard)
     }
 
     @Test
     fun `on not found artist name should return artist info empty card`() {
-        val infoCard: Card = mockk(relaxed = true)
+        every { lastFMService.getArtistBio("artistName") } throws mockk<Exception>()
 
-        every { proxyLastFM.getCard("artistName") } returns EmptyCard
-        every { proxyLastFM.getCard("artistName") } throws mockk<Exception>()
+        val result = proxyLastFM.getCard("artistName")
 
-        Assert.assertNotEquals(EmptyCard, infoCard)
+        Assert.assertEquals(EmptyCard, result)
     }
 }
