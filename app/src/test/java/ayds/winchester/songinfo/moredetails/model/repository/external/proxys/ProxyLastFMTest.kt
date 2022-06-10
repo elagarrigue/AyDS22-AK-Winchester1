@@ -19,13 +19,13 @@ class ProxyLastFMTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val infoCard : LastFMArtistBiography = mockk()
+        val infoCard : LastFMArtistBiography = mockk(relaxed = true)
 
         every { lastFMService.getArtistBio("artistName") } returns infoCard
 
         val result = proxyLastFM.getCard("artistName")
 
-        Assert.assertNotEquals(EmptyCard, infoCard)
+        Assert.assertNotEquals(EmptyCard, result)
     }
 
     @Test
