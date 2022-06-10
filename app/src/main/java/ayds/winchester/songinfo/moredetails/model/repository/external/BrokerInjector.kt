@@ -4,7 +4,7 @@ import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.Pr
 import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyLastFM
 import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyNewYorkTimes
 import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyWikipedia
-import ayds.winchester1.wikipedia.artistinfo.WikipediaArtistInfoInjector.wikipediaService
+import ayds.winchester1.wikipedia.WikipediaInjector.wikipediaService
 import ayds.lisboa1.lastfm.LastFMInjector.lastFMService
 import ayds.newyork2.newyorkdata.nytimes.NYTimesInjector.nyTimesService
 
