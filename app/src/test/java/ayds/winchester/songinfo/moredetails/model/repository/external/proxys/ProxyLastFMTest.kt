@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
+import java.lang.Exception
 
 class ProxyLastFMTest {
 
@@ -17,21 +18,20 @@ class ProxyLastFMTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val emptyCard: EmptyCard = mockk(relaxed = true)
         val infoCard: Card = mockk(relaxed = true)
 
         every { proxyLastFM.getCard("artistName") } returns infoCard
 
-        Assert.assertNotEquals(emptyCard, infoCard)
+        Assert.assertNotEquals(EmptyCard, infoCard)
     }
 
     @Test
     fun `on not found artist name should return artist info empty card`() {
-        val emptyCard: EmptyCard = mockk(relaxed = true)
         val infoCard: Card = mockk(relaxed = true)
 
-        every { proxyLastFM.getCard("artistName") } returns emptyCard
+        every { proxyLastFM.getCard("artistName") } returns EmptyCard
+        every { proxyLastFM.getCard("artistName") } throws mockk<Exception>()
 
-        Assert.assertNotEquals(emptyCard, infoCard)
+        Assert.assertNotEquals(EmptyCard, infoCard)
     }
 }

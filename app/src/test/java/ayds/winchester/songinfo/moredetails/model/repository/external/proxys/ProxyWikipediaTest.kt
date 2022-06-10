@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
+import java.lang.Exception
 
 class ProxyWikipediaTest {
 
@@ -17,21 +18,20 @@ class ProxyWikipediaTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val emptyCard: EmptyCard = mockk(relaxed = true)
         val infoCard: Card = mockk(relaxed = true)
 
         every { proxyWikipedia.getCard("artistName") } returns infoCard
 
-        Assert.assertNotEquals(emptyCard, infoCard)
+        Assert.assertNotEquals(EmptyCard, infoCard)
     }
 
     @Test
     fun `on not found artist name should return artist info empty card`() {
-        val emptyCard: EmptyCard = mockk(relaxed = true)
         val infoCard: Card = mockk(relaxed = true)
 
-        every { proxyWikipedia.getCard("artistName") } returns emptyCard
+        every { proxyWikipedia.getCard("artistName") } returns EmptyCard
+        every { proxyWikipedia.getCard("artistName") } throws mockk<Exception>()
 
-        Assert.assertNotEquals(emptyCard, infoCard)
+        Assert.assertNotEquals(EmptyCard, infoCard)
     }
 }

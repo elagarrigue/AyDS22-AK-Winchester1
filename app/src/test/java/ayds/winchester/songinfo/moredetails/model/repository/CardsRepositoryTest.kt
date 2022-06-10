@@ -60,7 +60,7 @@ class CardsRepositoryTest {
     @Test
     fun `given service exception should return empty collection of artist info cards`() {
         every { cardLocalStorage.getCardsByName("artistName") } returns mutableListOf()
-        every { broker.getCards("artistName") } throws mockk<Exception>()
+        every { broker.getCards("artistName") } returns emptyList()
 
         val result = cardsRepository.getCardsByTerm("artistName")
 
