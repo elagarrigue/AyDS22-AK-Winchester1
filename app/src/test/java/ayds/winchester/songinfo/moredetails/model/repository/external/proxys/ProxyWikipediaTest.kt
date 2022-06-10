@@ -1,7 +1,10 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external.proxys
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
+import ayds.winchester1.wikipedia.ArtistInfo
+import ayds.winchester1.wikipedia.WikipediaArtistInfo
 import ayds.winchester1.wikipedia.WikipediaService
 import io.mockk.every
 import io.mockk.mockk
@@ -18,20 +21,21 @@ class ProxyWikipediaTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val infoCard: Card = mockk(relaxed = true)
+        val wArtistInfo = WikipediaArtistInfo("description","infoUrl", "sourceLogoUrl")
 
-        every { proxyWikipedia.getCard("artistName") } returns infoCard
+        every { wikipediaService.getArtistInfo("artistName") } returns wArtistInfo
 
-        Assert.assertNotEquals(EmptyCard, infoCard)
+        val result = proxyWikipedia.getCard("artistName")
+
+        Assert.assertNotEquals(EmptyCard, result)
     }
 
     @Test
     fun `on not found artist name should return artist info empty card`() {
-        val infoCard: Card = mockk(relaxed = true)
+        every{ wikipediaService.getArtistInfo("artistName") } throws mockk<Exception>()
 
-        every { proxyWikipedia.getCard("artistName") } returns EmptyCard
-        every { proxyWikipedia.getCard("artistName") } throws mockk<Exception>()
+        val result = proxyWikipedia.getCard("artistName")
 
-        Assert.assertNotEquals(EmptyCard, infoCard)
+        Assert.assertEquals(EmptyCard, result)
     }
 }
