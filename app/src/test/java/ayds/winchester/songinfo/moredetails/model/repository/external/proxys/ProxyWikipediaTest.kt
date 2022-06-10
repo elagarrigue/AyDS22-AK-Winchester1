@@ -21,9 +21,9 @@ class ProxyWikipediaTest {
 
     @Test
     fun `on found artist name should return artist info card`() {
-        val ArtistInfo : WikipediaArtistInfo = mockk()
+        val artistInfo : WikipediaArtistInfo = mockk(relaxed = true)
 
-        every { wikipediaService.getArtistInfo("artistName") } returns ArtistInfo
+        every { wikipediaService.getArtistInfo("artistName") } returns artistInfo
 
         val result = proxyWikipedia.getCard("artistName")
 

@@ -35,7 +35,7 @@ class ProxyNewYorkTimesTest {
 
         val result = proxyNewYorkTimes.getCard("artistName")
 
-        Assert.assertNotEquals(EmptyCard, result)
+        Assert.assertEquals(EmptyCard, result)
     }
 
 }
