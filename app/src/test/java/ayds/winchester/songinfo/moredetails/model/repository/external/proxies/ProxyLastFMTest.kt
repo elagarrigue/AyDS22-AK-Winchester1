@@ -34,4 +34,13 @@ class ProxyLastFMTest {
 
         Assert.assertEquals(EmptyCard, result)
     }
+
+    @Test
+    fun `on service exception thrown should return an empty card`() {
+        every { lastFMService.getArtistBio("artistName") } returns null
+
+        val result = proxyLastFM.getCard("artistName")
+
+        Assert.assertEquals(EmptyCard, result)
+    }
 }

@@ -28,6 +28,15 @@ class ProxyWikipediaTest {
 
     @Test
     fun `on not found artist name should return artist info empty card`() {
+        every{ wikipediaService.getArtistInfo("artistName") } returns null
+
+        val result = proxyWikipedia.getCard("artistName")
+
+        Assert.assertEquals(EmptyCard, result)
+    }
+
+    @Test
+    fun `on service exception thrown should return an empty card`() {
         every{ wikipediaService.getArtistInfo("artistName") } throws mockk<Exception>()
 
         val result = proxyWikipedia.getCard("artistName")

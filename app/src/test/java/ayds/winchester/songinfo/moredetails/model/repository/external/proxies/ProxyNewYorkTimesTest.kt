@@ -27,7 +27,16 @@ class ProxyNewYorkTimesTest {
     }
 
     @Test
-    fun `on not found artist name should return artist info empty card`() {
+    fun `on not found artist name thrown should return an empty card`() {
+        every { newYorkTimesService.getArtist("artistName") } returns null
+
+        val result = proxyNewYorkTimes.getCard("artistName")
+
+        Assert.assertEquals(EmptyCard, result)
+    }
+
+    @Test
+    fun `on service exception thrown should return an empty card`() {
         every { newYorkTimesService.getArtist("artistName") } throws mockk<Exception>()
 
         val result = proxyNewYorkTimes.getCard("artistName")
