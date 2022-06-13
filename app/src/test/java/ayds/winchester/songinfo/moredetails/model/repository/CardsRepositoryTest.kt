@@ -3,6 +3,7 @@ package ayds.winchester.songinfo.moredetails.model.repository
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerImpl
+import ayds.winchester.songinfo.moredetails.model.repository.external.proxies.ProxyWikipedia
 import ayds.winchester.songinfo.moredetails.model.repository.local.MoreDetailsDataBase
 import io.mockk.every
 import io.mockk.mockk
@@ -58,9 +59,11 @@ class CardsRepositoryTest {
     }
 
     @Test
-    fun `given service exception should return empty collection of artist info cards`() {
+    fun `given service exception it should return an empty card`() {
+        val proxyWikipedia : ProxyWikipedia = mockk()
+
         every { cardLocalStorage.getCardsByName("artistName") } returns mutableListOf()
-        every { broker.getCards("artistName") } returns emptyList()
+        every { proxyWikipedia.getCard("artistName") } throws mockk<Exception>()
 
         val result = cardsRepository.getCardsByTerm("artistName")
 
