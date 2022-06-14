@@ -11,9 +11,8 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.R
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModel
 import ayds.winchester.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 import ayds.winchester.songinfo.utils.view.ImageLoader
@@ -23,19 +22,22 @@ interface MoreDetailsView {
     val uiState: MoreDetailsUiState
 
     fun openFullArticle()
+    fun updateUiComponents()
 }
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
-    private val artistInfoHelper: ArtistInfoHelper = MoreDetailsViewInjector.artistInfoHelper
+    private val cardInfoHelper: CardInfoHelper = MoreDetailsViewInjector.CARD_INFO_HELPER
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private lateinit var moreDetailsModel: MoreDetailsModel
     private lateinit var artistInfoTextView: TextView
     private lateinit var viewFullArticleButton: Button
     private lateinit var logoImageView: ImageView
+    private lateinit var sourceInfoTextView: TextView
+    private lateinit var nextCardButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +46,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         initProperties()
         initListeners()
         initObservers()
-        initLogoImage()
         initArtistName()
         notifySearchArtistInfoAction()
     }
 
     override fun openFullArticle() {
-        navigationUtils.openExternalUrl(this, uiState.pageUrl)
+        navigationUtils.openExternalUrl(this, uiState.getCard().pageUrl)
     }
 
     private fun initModule() {
@@ -59,71 +60,99 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initProperties() {
-        artistInfoTextView = findViewById(R.id.textPane2)
+        artistInfoTextView = findViewById(R.id.artistInfoTextView)
         viewFullArticleButton = findViewById(R.id.openUrlButton)
         logoImageView = findViewById(R.id.imageView)
+        sourceInfoTextView = findViewById(R.id.sourceInfoTextView)
+        nextCardButton = findViewById(R.id.nextCardButton)
     }
 
     private fun initListeners() {
         viewFullArticleButton.setOnClickListener { notifyOpenFullArticleAction() }
+        nextCardButton.setOnClickListener { notifyNavigateToNextCardAction() }
     }
 
     private fun notifyOpenFullArticleAction() {
         onActionSubject.notify(MoreDetailsUiEvent.ViewFullArticle)
     }
 
+    private fun notifyNavigateToNextCardAction() {
+        onActionSubject.notify(MoreDetailsUiEvent.NavigateToNextCard)
+    }
+
     private fun initObservers() {
-        moreDetailsModel.artistInfoObservable
+        moreDetailsModel.cardsObservable
             .subscribe { value -> updateArtistInfo(value) }
 
     }
 
-    private fun updateArtistInfo(artist: ArtistInfo) {
-        updateUiState(artist)
+    private fun updateArtistInfo(cards: List<Card>) {
+        updateUiState(cards)
+        updateUiComponents()
+    }
+
+    override fun updateUiComponents(){
         updateArtistInfo()
         updateMoreDetailsState()
+        updateSourceInfo()
+        updateSourceLogo()
     }
 
-    private fun updateUiState(artist: ArtistInfo) {
-        when (artist) {
-            is WikipediaArtistInfo -> updateArtistUiState(artist)
-            EmptyArtistInfo -> updateNoResultsUiState()
-        }
+    private fun updateUiState(cards: List<Card>) {
+        if (cards.isEmpty()) updateNoResultsUiState()
+        else updateResultsUiState(cards)
     }
 
-    private fun updateArtistUiState(artist: ArtistInfo) {
+    private fun updateResultsUiState(cards: List<Card>){
         uiState = uiState.copy(
-            pageUrl = "${uiState.FULL_ARTICLE_URL}${artist.pageId}",
-            info = artistInfoHelper.artistInfoTextToHtml(artist, uiState.artistName) ,
-            actionsEnabled = true
+            cards = cards.map {
+                CardUiState(
+                    pageUrl = it.infoURL,
+                    info = cardInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
+                    sourceInfo = it.source,
+                    imageUrl = it.sourceLogoURL,
+                    actionsEnabled = true,
+                )
+            },
+            indexCard = 0
         )
     }
 
     private fun updateNoResultsUiState() {
         uiState = uiState.copy(
-            actionsEnabled = false
+            cards = listOf(EmptyCard.let{
+                CardUiState(
+                    pageUrl = it.infoURL,
+                    info = cardInfoHelper.artistInfoTextToHtml(it, uiState.artistName),
+                    sourceInfo = it.source,
+                    imageUrl = it.sourceLogoURL,
+                    actionsEnabled = false,
+                )
+            }),
+            indexCard = 0
         )
     }
 
     private fun updateArtistInfo() {
         runOnUiThread {
-            artistInfoTextView.text = Html.fromHtml(uiState.info)
+            artistInfoTextView.text = Html.fromHtml(uiState.getCard().info)
         }
     }
 
     private fun updateMoreDetailsState() {
-        enableActions(uiState.actionsEnabled)
+        enableActions(uiState.getCard().actionsEnabled)
     }
 
     private fun enableActions(enable: Boolean) {
         runOnUiThread {
             viewFullArticleButton.isEnabled = enable
+            nextCardButton.isEnabled = enable
         }
     }
 
     private fun initLogoImage() {
         runOnUiThread {
-            imageLoader.loadImageIntoView(uiState.IMAGE_URL, logoImageView)
+            imageLoader.loadImageIntoView(uiState.getCard().imageUrl, logoImageView)
         }
     }
 
@@ -134,6 +163,17 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun notifySearchArtistInfoAction() {
         onActionSubject.notify(MoreDetailsUiEvent.Search)
+    }
+
+    private fun updateSourceInfo() {
+        runOnUiThread {
+            sourceInfoTextView.text =
+                Html.fromHtml(cardInfoHelper.getStringFromCardSource(uiState.getCard().sourceInfo))
+        }
+    }
+
+    private fun updateSourceLogo() {
+        initLogoImage()
     }
 
     companion object {

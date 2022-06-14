@@ -1,8 +1,8 @@
 package ayds.winchester.songinfo.moredetails.view
 
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.winchester.songinfo.moredetails.model.entities.WikipediaArtistInfo
-import java.lang.StringBuilder
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 
 const val OPEN_HTML_TAG = "<html><div width=400><font face=\"arial\">"
 const val CLOSE_HTML_TAG = "</font></div></html>"
@@ -16,11 +16,12 @@ const val SPACE = " "
 const val STORED = "[*]"
 const val NOT_FOUND = "Artist not found"
 
-interface ArtistInfoHelper {
-    fun artistInfoTextToHtml(artistInfo: ArtistInfo, artistName: String): String
+interface CardInfoHelper {
+    fun artistInfoTextToHtml(artistInfo: Card, artistName: String): String
+    fun getStringFromCardSource(cardSource : CardSource) : String
 }
 
-internal class ArtistInfoHelperImpl : ArtistInfoHelper {
+internal class CardInfoHelperImpl : CardInfoHelper {
 
     private fun addBoldToInfo(info: String, artistName: String): String {
         return info
@@ -40,14 +41,25 @@ internal class ArtistInfoHelperImpl : ArtistInfoHelper {
         return builder.toString()
     }
 
-    override fun artistInfoTextToHtml(artistInfo: ArtistInfo, artistName: String): String {
+    override fun artistInfoTextToHtml(artistInfo: Card, artistName: String): String {
         return when (artistInfo) {
-            is WikipediaArtistInfo -> {
-                val info = (if (artistInfo.isLocallyStored) STORED else SPACE) + artistInfo.info
+            is EmptyCard -> {
+                NOT_FOUND
+            }
+            else -> {
+                val info = (if (artistInfo.isLocallyStored) STORED else SPACE) + artistInfo.description
                 val textWithBold = addBoldToInfo(info, artistName)
                 return buildHtml(textWithBold)
             }
-            else -> NOT_FOUND
+        }
+    }
+
+    override fun getStringFromCardSource(cardSource: CardSource): String {
+        return when (cardSource) {
+            CardSource.WIKIPEDIA -> "Wikipedia"
+            CardSource.NEW_YORK_TIMES -> "New York Times"
+            CardSource.LAST_FM -> "Last FM"
+            CardSource.EMPTY -> "Empty Card"
         }
     }
 }

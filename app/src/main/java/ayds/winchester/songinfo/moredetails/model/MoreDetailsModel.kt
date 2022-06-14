@@ -2,22 +2,23 @@ package ayds.winchester.songinfo.moredetails.model
 
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.repository.CardsRepository
 
 interface MoreDetailsModel {
-    val artistInfoObservable: Observable<ArtistInfo>
+    val cardsObservable: Observable<List<Card>>
 
-    fun searchArtistInfo(artistName: String)
+    fun searchCards(term: String)
 }
 
-internal class MoreDetailsModelImpl(private val repository: InfoRepository) : MoreDetailsModel {
+internal class MoreDetailsModelImpl(private val repository: CardsRepository) : MoreDetailsModel {
 
-    override val artistInfoObservable = Subject<ArtistInfo>()
+    override val cardsObservable = Subject<List<Card>>()
 
-    override fun searchArtistInfo(artistName: String) {
-        repository.getArtistInfoByName(artistName).let{
-            artistInfoObservable.notify(it)
+    override fun searchCards(term: String) {
+        repository.getCardsByTerm(term).let{
+            cardsObservable.notify(it)
         }
     }
+
 }

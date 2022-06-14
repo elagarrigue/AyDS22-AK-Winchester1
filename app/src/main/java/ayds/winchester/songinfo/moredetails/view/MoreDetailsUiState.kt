@@ -1,10 +1,24 @@
 package ayds.winchester.songinfo.moredetails.view
 
-data class MoreDetailsUiState(
-    val artistName: String = "",
-    val info: String = "",
-    val pageUrl: String = "",
-    val actionsEnabled: Boolean = false,
-    val IMAGE_URL: String = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png",
-    val FULL_ARTICLE_URL: String = "https://en.wikipedia.org/?curid=",
+import ayds.winchester.songinfo.moredetails.model.entities.CardSource
+
+data class CardUiState(
+    val pageUrl : String = "",
+    val info : String = "",
+    val sourceInfo : CardSource = CardSource.EMPTY,
+    val imageUrl: String = "",
+    val actionsEnabled : Boolean = false,
 )
+
+data class MoreDetailsUiState(
+    val cards: List<CardUiState> = emptyList(),
+    val artistName: String = "",
+    val fullArticleUrl: String = "",
+    var indexCard: Int = 0,
+){
+    fun getCard(): CardUiState = cards[indexCard % cards.size]
+
+    fun nextCard(){
+        indexCard++
+    }
+}

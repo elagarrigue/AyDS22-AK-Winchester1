@@ -1,14 +1,13 @@
 package ayds.winchester.songinfo.moredetails.model
 
 import android.content.Context
-import ayds.winchester.songinfo.moredetails.model.repository.InfoRepository
-import ayds.winchester.songinfo.moredetails.model.repository.InfoRepositoryImpl
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaArtistInfoService
-import ayds.winchester.songinfo.moredetails.model.repository.external.wikipedia.WikipediaInjector
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.OtherInfoDataBase
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.database.CursorToWikipediaArtistInfoMapperImpl
-import ayds.winchester.songinfo.moredetails.model.repository.local.wikipedia.database.OtherInfoDataBaseImpl
+import ayds.winchester.songinfo.moredetails.model.repository.CardsRepository
+import ayds.winchester.songinfo.moredetails.model.repository.CardsRepositoryImpl
+import ayds.winchester.songinfo.moredetails.model.repository.local.MoreDetailsDataBase
+import ayds.winchester.songinfo.moredetails.model.repository.local.database.CursorToCardMapperImpl
+import ayds.winchester.songinfo.moredetails.model.repository.local.database.MoreDetailsDataBaseImpl
 import ayds.winchester.songinfo.moredetails.view.MoreDetailsView
+import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerInjector.broker
 
 object MoreDetailsModelInjector {
     private lateinit var moreDetailsModel: MoreDetailsModel
@@ -16,12 +15,11 @@ object MoreDetailsModelInjector {
     fun getMoreDetailsModel(): MoreDetailsModel = moreDetailsModel
 
     fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
-        val otherInfoDataBase: OtherInfoDataBase = OtherInfoDataBaseImpl(
-            moreDetailsView as Context, CursorToWikipediaArtistInfoMapperImpl()
+        val moreDetailsDataBase: MoreDetailsDataBase = MoreDetailsDataBaseImpl(
+            moreDetailsView as Context, CursorToCardMapperImpl()
         )
-        val wikipediaArtistInfoService: WikipediaArtistInfoService = WikipediaInjector.wikipediaArtistInfoService
-        val repository: InfoRepository =
-            InfoRepositoryImpl(otherInfoDataBase, wikipediaArtistInfoService)
+
+        val repository: CardsRepository = CardsRepositoryImpl(moreDetailsDataBase, broker)
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }
 }

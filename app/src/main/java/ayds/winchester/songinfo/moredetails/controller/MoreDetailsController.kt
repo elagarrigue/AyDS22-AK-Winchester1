@@ -25,6 +25,7 @@ internal class MoreDetailsControllerImpl(
             when (value) {
                 MoreDetailsUiEvent.ViewFullArticle -> viewFullArticle()
                 MoreDetailsUiEvent.Search -> searchArtist()
+                MoreDetailsUiEvent.NavigateToNextCard -> next()
             }
         }
 
@@ -34,7 +35,14 @@ internal class MoreDetailsControllerImpl(
 
     private fun searchArtist() {
         Thread {
-            moreDetailsModel.searchArtistInfo(moreDetailsView.uiState.artistName)
+            moreDetailsModel.searchCards(moreDetailsView.uiState.artistName)
+        }.start()
+    }
+
+    private fun next() {
+        Thread {
+            moreDetailsView.uiState.nextCard()
+            moreDetailsView.updateUiComponents()
         }.start()
     }
 }
